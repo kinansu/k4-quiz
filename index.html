@@ -1,1114 +1,760 @@
-
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>K4 | بنك أسئلة أمراض الدم</title>
-    <style>
-        :root {
-            --k4-deep: #0a0f1e;
-            --k4-plate: #111827;
-            --k4-card: #1a1f2e;
-            --k4-gold: #d4a853;
-            --k4-gold-light: #f0d078;
-            --k4-accent: #3b82f6;
-            --k4-accent-glow: rgba(59, 130, 246, 0.35);
-            --k4-correct: #10b981;
-            --k4-correct-bg: rgba(16, 185, 129, 0.12);
-            --k4-wrong: #ef4444;
-            --k4-wrong-bg: rgba(239, 68, 68, 0.12);
-            --k4-text: #e2e8f0;
-            --k4-text-muted: #94a3b8;
-            --k4-border: #1e293b;
-            --k4-radius: 18px;
-            --k4-radius-sm: 12px;
-            --k4-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --k4-shadow: 0 4px 32px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>اختبار: الدمويات (تشكل الدم وفيزيولوجيا الكرية الحمراء)</title>
+<style>
+  :root{
+    --navy:#1B3A4B;
+    --navy-light:#2c5470;
+    --ivory:#FAF7F0;
+    --sage:#8AA893;
+    --charcoal:#3a3632;
+    --danger:#b23a3a;
+    --success:#3a7a4d;
+    --amber:#c78a2e;
+    --border:#dfd8c8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Tahoma','Segoe UI',sans-serif;
+    background:var(--ivory);
+    color:var(--charcoal);
+    line-height:1.7;
+    padding-bottom:40px;
+  }
+  header{
+    background:var(--navy);
+    color:var(--ivory);
+    padding:18px 16px 14px;
+    text-align:center;
+    position:sticky;
+    top:0;
+    z-index:10;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  }
+  header h1{
+    margin:0 0 6px;
+    font-size:17px;
+    font-weight:700;
+  }
+  .progress-wrap{
+    max-width:560px;
+    margin:0 auto;
+  }
+  .progress-bar-bg{
+    background:rgba(255,255,255,0.2);
+    border-radius:20px;
+    height:8px;
+    overflow:hidden;
+  }
+  .progress-bar-fill{
+    background:var(--sage);
+    height:100%;
+    width:0%;
+    transition:width .3s ease;
+  }
+  .progress-text{
+    font-size:12px;
+    margin-top:6px;
+    opacity:.9;
+  }
+  main{
+    max-width:560px;
+    margin:0 auto;
+    padding:16px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px 16px;
+    margin-bottom:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
+  }
+  .q-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12px;
+    color:#7a7368;
+    margin-bottom:8px;
+  }
+  .q-tag{
+    background:var(--ivory);
+    border:1px solid var(--border);
+    padding:2px 10px;
+    border-radius:20px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .retry-badge{
+    background:#fdeeea;
+    color:var(--danger);
+    border:1px solid #f2c9c0;
+    padding:2px 10px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:11px;
+  }
+  .q-text{
+    font-size:16px;
+    font-weight:700;
+    color:var(--navy);
+    margin-bottom:10px;
+  }
+  .q-hint{
+    background:#f3f0e6;
+    border:1px dashed var(--sage);
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:12.5px;
+    color:#5c6e60;
+    margin-bottom:14px;
+  }
+  .q-hint b{color:var(--navy);}
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .option-btn{
+    display:block;
+    width:100%;
+    text-align:right;
+    background:var(--ivory);
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:14.5px;
+    font-family:inherit;
+    color:var(--charcoal);
+    cursor:pointer;
+    transition:background .15s, border-color .15s, transform .1s;
+  }
+  .option-btn:active{transform:scale(0.98);}
+  .option-btn:hover{border-color:var(--navy-light);}
+  .option-btn.correct{
+    background:#eaf5ec;
+    border-color:var(--success);
+    color:var(--success);
+    font-weight:700;
+  }
+  .option-btn.wrong{
+    background:#fdeeea;
+    border-color:var(--danger);
+    color:var(--danger);
+    font-weight:700;
+  }
+  .option-btn.disabled{
+    pointer-events:none;
+    opacity:.6;
+  }
+  .option-btn.disabled.correct,
+  .option-btn.disabled.wrong{
+    opacity:1;
+  }
+  .feedback{
+    margin-top:16px;
+    border-radius:10px;
+    padding:14px;
+    font-size:14px;
+    display:none;
+    animation:fadein .25s ease;
+  }
+  @keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+  .feedback.show{display:block;}
+  .feedback.right{
+    background:#eaf5ec;
+    border:1px solid var(--success);
+  }
+  .feedback.wrong{
+    background:#fdeeea;
+    border:1px solid var(--danger);
+  }
+  .feedback-title{
+    font-weight:700;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .feedback.right .feedback-title{color:var(--success);}
+  .feedback.wrong .feedback-title{color:var(--danger);}
+  .feedback-body{color:var(--charcoal);}
+  .feedback-body b{color:var(--navy);}
+  .next-btn{
+    margin-top:14px;
+    width:100%;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:13px;
+    font-size:15px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .next-btn:active{opacity:.85;}
+  .tf-wrap{display:flex; gap:10px;}
+  .tf-wrap .option-btn{flex:1; text-align:center;}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  /* Start screen */
+  .start-screen{
+    max-width:560px;
+    margin:24px auto;
+    padding:0 16px;
+    text-align:center;
+  }
+  .start-screen .logo-dot{
+    width:54px; height:54px;
+    background:var(--navy);
+    border-radius:50%;
+    margin:0 auto 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ivory);
+    font-weight:700;
+    font-size:20px;
+  }
+  .start-screen h2{
+    color:var(--navy);
+    margin-bottom:8px;
+  }
+  .start-screen p{
+    color:#655f55;
+    font-size:14px;
+    margin-bottom:22px;
+  }
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .stat-box{
+    flex:1;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 8px;
+  }
+  .stat-box .num{
+    font-size:20px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .stat-box .label{
+    font-size:11px;
+    color:#7a7368;
+  }
+  .start-btn{
+    width:100%;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    padding:15px;
+    font-size:16px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+  }
 
-        body {
-            font-family: 'Segoe UI', 'Tahoma', 'Cairo', sans-serif;
-            background: var(--k4-deep);
-            background-image: radial-gradient(ellipse at 50% 0%, rgba(212, 168, 83, 0.07) 0%, transparent 60%),
-                radial-gradient(ellipse at 20% 80%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px;
-            color: var(--k4-text);
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .k4-brand-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 6px 0;
-        }
-
-        .k4-logo {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            flex-shrink: 0;
-        }
-
-        .k4-logo .k4-geo {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1f2e 0%, #111827 100%);
-            border: 2.5px solid var(--k4-gold);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 0 22px rgba(212, 168, 83, 0.25), 0 0 0 4px rgba(212, 168, 83, 0.06);
-            transform: rotate(45deg);
-            transition: var(--k4-transition);
-        }
-
-        .k4-logo .k4-geo span {
-            transform: rotate(-45deg);
-            font-weight: 900;
-            font-size: 21px;
-            letter-spacing: -1px;
-            background: linear-gradient(180deg, #f0d078 0%, #d4a853 40%, #b8943a 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .k4-logo::after {
-            content: '';
-            position: absolute;
-            inset: -4px;
-            border-radius: 18px;
-            border: 1px solid rgba(212, 168, 83, 0.35);
-            transform: rotate(45deg);
-            pointer-events: none;
-            animation: k4-pulse-ring 2.8s ease-in-out infinite;
-        }
-
-        @keyframes k4-pulse-ring {
-            0%,
-            100% {
-                border-color: rgba(212, 168, 83, 0.25);
-                inset: -4px;
-            }
-            50% {
-                border-color: rgba(212, 168, 83, 0.6);
-                inset: -7px;
-            }
-        }
-
-        .k4-brand-text {
-            font-weight: 800;
-            font-size: 19px;
-            letter-spacing: 0.5px;
-            color: #e2e8f0;
-        }
-        .k4-brand-text .k4-dot {
-            color: var(--k4-gold);
-        }
-        .k4-brand-sub {
-            font-size: 10px;
-            color: var(--k4-text-muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-top: -2px;
-        }
-
-        .quiz-card {
-            background: var(--k4-card);
-            border: 1px solid var(--k4-border);
-            border-radius: var(--k4-radius);
-            box-shadow: var(--k4-shadow);
-            padding: 22px 18px 18px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .quiz-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--k4-gold), var(--k4-accent), var(--k4-gold-light));
-            border-radius: 0 0 4px 4px;
-            opacity: 0.8;
-        }
-
-        .progress-wrap {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .progress-bar-outer {
-            flex: 1;
-            height: 6px;
-            background: var(--k4-border);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-bar-inner {
-            height: 100%;
-            background: linear-gradient(90deg, var(--k4-gold), var(--k4-accent));
-            border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 12px var(--k4-accent-glow);
-        }
-        .progress-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--k4-text-muted);
-            white-space: nowrap;
-            min-width: 44px;
-            text-align: left;
-        }
-
-        .question-number {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--k4-gold);
-            background: rgba(212, 168, 83, 0.08);
-            padding: 5px 14px;
-            border-radius: 20px;
-            margin-bottom: 14px;
-            border: 1px solid rgba(212, 168, 83, 0.2);
-        }
-
-        .question-text {
-            font-size: 17px;
-            font-weight: 700;
-            line-height: 1.6;
-            margin-bottom: 18px;
-            color: #f1f5f9;
-        }
-
-        .options-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-            margin-bottom: 14px;
-        }
-
-        .option-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-            padding: 14px 14px;
-            background: var(--k4-plate);
-            border: 1.5px solid var(--k4-border);
-            border-radius: var(--k4-radius-sm);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #cbd5e1;
-            transition: all 0.25s ease;
-            font-family: inherit;
-            text-align: right;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .option-btn:active {
-            transform: scale(0.975);
-            transition: transform 0.1s ease;
-        }
-
-        .option-btn:hover:not(.disabled) {
-            border-color: rgba(212, 168, 83, 0.5);
-            background: #1c2335;
-            box-shadow: 0 0 20px rgba(212, 168, 83, 0.08);
-        }
-
-        .option-letter {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            background: var(--k4-border);
-            font-weight: 800;
-            font-size: 13px;
-            color: #94a3b8;
-            flex-shrink: 0;
-            transition: var(--k4-transition);
-        }
-
-        .option-btn.selected {
-            border-color: var(--k4-accent) !important;
-            background: rgba(59, 130, 246, 0.1) !important;
-            box-shadow: 0 0 20px var(--k4-accent-glow);
-            color: #f1f5f9;
-        }
-        .option-btn.selected .option-letter {
-            background: var(--k4-accent);
-            color: #fff;
-            box-shadow: 0 0 14px var(--k4-accent-glow);
-        }
-
-        .option-btn.correct-reveal {
-            border-color: var(--k4-correct) !important;
-            background: var(--k4-correct-bg) !important;
-            color: #d1fae5;
-            animation: pulse-green 0.5s ease;
-        }
-        .option-btn.correct-reveal .option-letter {
-            background: var(--k4-correct);
-            color: #fff;
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
-        }
-
-        .option-btn.wrong-reveal {
-            border-color: var(--k4-wrong) !important;
-            background: var(--k4-wrong-bg) !important;
-            color: #fecaca;
-            animation: shake 0.4s ease;
-        }
-        .option-btn.wrong-reveal .option-letter {
-            background: var(--k4-wrong);
-            color: #fff;
-            box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
-        }
-
-        .option-btn.disabled {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        .option-btn.disabled.correct-reveal,
-        .option-btn.disabled.wrong-reveal {
-            opacity: 1;
-        }
-
-        @keyframes pulse-green {
-            0%,
-            100% {
-                box-shadow: 0 0 0 rgba(16, 185, 129, 0);
-            }
-            50% {
-                box-shadow: 0 0 24px rgba(16, 185, 129, 0.45);
-            }
-        }
-
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            20% {
-                transform: translateX(-6px);
-            }
-            40% {
-                transform: translateX(6px);
-            }
-            60% {
-                transform: translateX(-4px);
-            }
-            80% {
-                transform: translateX(4px);
-            }
-        }
-
-        .hint-area {
-            background: rgba(212, 168, 83, 0.05);
-            border: 1px dashed rgba(212, 168, 83, 0.3);
-            border-radius: var(--k4-radius-sm);
-            padding: 12px 14px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            pointer-events: none;
-        }
-        .hint-area.visible {
-            opacity: 1;
-            max-height: 200px;
-            pointer-events: auto;
-            margin-bottom: 12px;
-        }
-        .hint-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-        .hint-text {
-            font-size: 13px;
-            color: #d4a853;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        .explanation-area {
-            background: rgba(59, 130, 246, 0.06);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            border-radius: var(--k4-radius-sm);
-            padding: 14px 16px;
-            margin-top: 6px;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            pointer-events: none;
-        }
-        .explanation-area.visible {
-            opacity: 1;
-            max-height: 400px;
-            pointer-events: auto;
-            margin-top: 12px;
-        }
-        .explanation-label {
-            font-weight: 800;
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: var(--k4-accent);
-            margin-bottom: 6px;
-        }
-        .explanation-text {
-            font-size: 13px;
-            color: #bcc9dc;
-            line-height: 1.6;
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 6px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-            transition: var(--k4-transition);
-            letter-spacing: 0.3px;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-            white-space: nowrap;
-        }
-        .btn:active {
-            transform: scale(0.94);
-            transition: transform 0.1s ease;
-        }
-
-        .btn-hint {
-            background: transparent;
-            border: 1.5px solid rgba(212, 168, 83, 0.5);
-            color: #d4a853;
-            flex: 1;
-            min-width: 70px;
-        }
-        .btn-hint:hover {
-            background: rgba(212, 168, 83, 0.08);
-            border-color: #d4a853;
-        }
-        .btn-hint:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        .btn-next {
-            background: linear-gradient(135deg, var(--k4-accent), #2563eb);
-            color: #fff;
-            flex: 2;
-            min-width: 110px;
-            box-shadow: 0 4px 18px rgba(59, 130, 246, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .btn-next:hover {
-            box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
-            background: linear-gradient(135deg, #4b8df8, #3068e0);
-        }
-        .btn-next:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            box-shadow: none;
-        }
-
-        .btn-restart {
-            background: transparent;
-            border: 1.5px solid var(--k4-border);
-            color: #94a3b8;
-            flex: 1;
-            min-width: 100px;
-        }
-        .btn-restart:hover {
-            border-color: #94a3b8;
-            color: #e2e8f0;
-        }
-
-        .result-screen {
-            text-align: center;
-            padding: 30px 16px;
-        }
-        .result-emoji {
-            font-size: 60px;
-            margin-bottom: 12px;
-            animation: bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes bounce-in {
-            0% {
-                transform: scale(0.3);
-                opacity: 0;
-            }
-            60% {
-                transform: scale(1.08);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        .result-score {
-            font-size: 46px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            background: linear-gradient(180deg, #f0d078, #d4a853);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .result-label {
-            font-size: 14px;
-            color: var(--k4-text-muted);
-            margin-bottom: 20px;
-        }
-        .result-msg {
-            font-size: 16px;
-            font-weight: 600;
-            color: #e2e8f0;
-            margin-bottom: 18px;
-        }
-
-        .k4-footer {
-            text-align: center;
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: rgba(148, 163, 184, 0.5);
-            padding: 4px 0;
-        }
-        .k4-footer span {
-            color: var(--k4-gold);
-            font-weight: 700;
-        }
-
-        @media (max-width: 380px) {
-            .quiz-card {
-                padding: 16px 12px 14px;
-            }
-            .question-text {
-                font-size: 15px;
-            }
-            .option-btn {
-                padding: 12px 10px;
-                font-size: 13px;
-                gap: 8px;
-            }
-            .option-letter {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-                border-radius: 8px;
-            }
-            .btn {
-                padding: 10px 14px;
-                font-size: 12px;
-            }
-        }
-    </style>
+  /* Review screen */
+  .review-header{
+    text-align:center;
+    padding:20px 16px 4px;
+  }
+  .review-header .badge{
+    display:inline-block;
+    background:var(--sage);
+    color:#fff;
+    padding:6px 18px;
+    border-radius:20px;
+    font-weight:700;
+    font-size:13px;
+    margin-bottom:10px;
+  }
+  .review-header h2{
+    color:var(--navy);
+    margin:0 0 4px;
+  }
+  .review-header p{
+    color:#655f55;
+    font-size:13px;
+    margin:0 0 10px;
+  }
+  .review-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-right:5px solid var(--sage);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:12px;
+  }
+  .review-card .rq-num{
+    font-size:11px;
+    color:var(--navy);
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .review-card .rq-text{
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--charcoal);
+    margin-bottom:8px;
+  }
+  .review-card .rq-answer{
+    background:var(--ivory);
+    border-radius:8px;
+    padding:8px 10px;
+    font-size:13.5px;
+    margin-bottom:8px;
+    color:var(--success);
+    font-weight:700;
+  }
+  .review-card .rq-reason{
+    font-size:13px;
+    color:#4a453d;
+  }
+  .review-card .rq-attempts{
+    margin-top:8px;
+    font-size:11px;
+    color:var(--danger);
+  }
+  .hidden{display:none !important;}
+  footer.finish-note{
+    text-align:center;
+    color:#8a8375;
+    font-size:12px;
+    padding:20px;
+  }
+</style>
 </head>
 <body>
-    <div class="app-container" id="appContainer">
-        <div class="k4-brand-bar">
-            <div class="k4-logo"><div class="k4-geo"><span>K4</span></div></div>
-            <div>
-                <div class="k4-brand-text">K<span class="k4-dot">4</span> QUIZ</div>
-                <div class="k4-brand-sub">أمراض الدم · 30 سؤال</div>
-            </div>
-        </div>
-        <div id="quizRoot"></div>
-        <div class="k4-footer">منصة <span>K4</span> · تعلّم بذكاء</div>
+
+<header id="mainHeader">
+  <h1>اختبار: الدمويات</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 / 0</div>
+  </div>
+</header>
+
+<!-- START SCREEN -->
+<div class="start-screen" id="startScreen">
+  <div class="logo-dot">Hm</div>
+  <h2>جاهز للاختبار؟</h2>
+  <p>30 سؤالاً في الدمويات (تشكل الدم، فيزيولوجيا الكرية الحمراء، والاضطرابات الدموية). يظهر تلميح وتعليل مفصل لكل خيار بعد الإجابة، وإذا أخطأت يُعاد عليك السؤال حتى تجيب بشكل صحيح.</p>
+  <div class="stat-row">
+    <div class="stat-box"><div class="num">30</div><div class="label">سؤالاً</div></div>
+    <div class="stat-box"><div class="num">4</div><div class="label">محاور</div></div>
+    <div class="stat-box"><div class="num">∞</div><div class="label">محاولات</div></div>
+  </div>
+  <button class="start-btn" id="startBtn">ابدأ الاختبار</button>
+</div>
+
+<!-- QUIZ MAIN -->
+<main id="quizMain" class="hidden">
+  <div class="card" id="qCard">
+    <div class="q-meta">
+      <span class="q-tag" id="qTag">سؤال 1</span>
+      <span class="retry-badge hidden" id="retryBadge">إعادة المحاولة</span>
     </div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-hint" id="qHint"></div>
+    <div class="options" id="qOptions"></div>
+    <div class="feedback" id="feedback">
+      <div class="feedback-title" id="feedbackTitle"></div>
+      <div class="feedback-body" id="feedbackBody"></div>
+    </div>
+    <button class="next-btn hidden" id="nextBtn">السؤال التالي</button>
+  </div>
+</main>
 
-    <script>
-        (function() {
-            const questionBank = [{
-                id: 1,
-                question: 'إذا خضع مريض مصاب بورم خبيث لمعالجة شعاعية تستهدف الخلايا سريعة الانقسام، فلماذا تنجو الخلايا الجذعية المكونة للدم (Stem cells) من هذا التأثير المدمر؟',
-                options: [
-                    { letter: 'أ', text: 'لأنها خلايا متمايزة تفرز مركبات واقية تمنع الإشعاع.' },
-                    { letter: 'ب',
-                        text: 'لتواجدها في مرحلة الراحة G0 في الدورة الخلوية مما يجعلها مقاومة للمركبات الكيميائية والشعاعية.' },
-                    { letter: 'ج', text: 'لأنها تهاجر فوراً إلى الغدد اللمفاوية المحيطية عند استشعار الخطر الشعاعي.' },
-                    { letter: 'د', text: 'لأنها تمتلك مخزوناً هائلاً من الترومبوبويتين الذي يحيد الجزيئات الحرة.' },
-                ],
-                correctIndex: 1,
-                hint: 'ابحث عن الحالة التي تمر بها هذه الخلايا في دورتها الخلوية وتأثيرها على استقرارها جينياً.',
-                explanation: 'صحيح علمياً؛ وجود الخلايا الجذعية في مرحلة الراحة G0 يحميها من العلاجات التي تستهدف الأطوار النشطة للانقسام الخلوي في الحالات السرطانية.',
-            }, {
-                id: 2,
-                question: 'أثناء التطور الجنيني البشري، أين يتركز تشكل خلايا الدم (Hematopoiesis) في الشهر السادس من الحمل؟',
-                options: [
-                    { letter: 'أ', text: 'الحويصل المحي بشكل رئيسي وجدران الأبهر.' },
-                    { letter: 'ب', text: 'الكبد والطحال.' },
-                    { letter: 'ج', text: 'نقي العظام الطويلة مثل عظم الفخذ والظنبوب حصراً.' },
-                    { letter: 'د', text: 'الغدة الزعترية (التوتة).' },
-                ],
-                correctIndex: 1,
-                hint: 'تذكر تسلسل أعضاء نشوء الدم جينياً قبل أن ينفرد نقي العظم بالعملية بعد الولادة.',
-                explanation: 'صحيح؛ في الشهر السادس من المرحلة الجنينية يمثل الكبد والطحال المراكز الرئيسية لتشكل خلايا الدم.',
-            }, {
-                id: 3,
-                question: 'ما الذي يحدث لقدرات التجدد الذاتي (Self-renewal) والتمايز (Differentiation) عندما تتحول الخلايا الجذعية إلى أرومات نقوية ولمفاوية؟',
-                options: [
-                    { letter: 'أ', text: 'تزداد القدرة على التجدد الذاتي وتتراجع القدرة على التمايز.' },
-                    { letter: 'ب', text: 'تتحسن كلتا القدرتين بشكل متوازٍ لضمان غزارة الإنتاج.' },
-                    { letter: 'ج',
-                        text: 'تفقد الخلايا قدرتها على التجدد الذاتي بينما تكتسب قدرة أكبر على التمايز.' },
-                    { letter: 'د', text: 'تفقد الخلايا القدرتين معاً وتتحول فوراً إلى خلايا هرمة.' },
-                ],
-                correctIndex: 2,
-                hint: 'العلاقة عكسية بين نضوج الخلية وتخصصها وقدرتها على استنساخ نفسها بشكل أبدي.',
-                explanation: 'صحيح؛ في هذه المرحلة تفقد الخلايا قدرتها على التجدد الذاتي في حين تكتسب قدرة أكبر على التمايز.',
-            }, {
-                id: 4,
-                question: 'في سياق تنظيم تشكل الدم بنقي العظم، ما هو الدور الأساسي الذي تلعبه البالعات الكبيرة (Macrophages) المتواجدة في منطقة السدى؟',
-                options: [
-                    { letter: 'أ', text: 'إفراز الهيبارين لمنع حدوث التخثر داخل الجيوب الشعرية.' },
-                    { letter: 'ب', text: 'التمايز إلى خلايا شحمية لملء الفراغات المتبقية بعد النضوج الخلوي.' },
-                    { letter: 'ج',
-                        text: 'ابتلاع المخلفات الخلوية الناتجة أثناء عملية تشكل الدم وتنظيم التمايز والنضج الخلوي.' },
-                    { letter: 'د', text: 'تشكيل الجيوب الشعرية التي تعبر من خلالها الخلايا الناضجة.' },
-                ],
-                correctIndex: 2,
-                hint: 'دورها مزدوج يرتبط بنظافة البيئة النخاعية وتوجيه الخلايا الناشئة.',
-                explanation: 'صحيح؛ تتخصص البالعات الكبيرة في ابتلاع المخلفات الخلوية الناتجة أثناء تشكل الدم، كما تقوم بتنظيم التمايز والنضج الخلوي.',
-            }, {
-                id: 5,
-                question: 'مريض يعاني من قصور كلوي مزمن متقدم، ظهر لديه فقر دم شديد مع انخفاض ملحوظ في توليد الكريات الحمراء. ما هو العامل المنظم الأساسي المسبب لهذه الحالة؟',
-                options: [
-                    { letter: 'أ', text: 'نقص إنتاج عامل تحفيز الخلايا المحببة (CSF-G).' },
-                    { letter: 'ب', text: 'نقص إفراز الإريتروبويتين (Erythropoietin).' },
-                    { letter: 'ج', text: 'فرط نشاط خلايا السدى النخاعية وإفراز الكولاجين.' },
-                    { letter: 'د', text: 'ارتفاع مستويات الترومبوبويتين الكبدي.' },
-                ],
-                correctIndex: 1,
-                hint: 'تذكر الغليكوبروتين الذي يتم إنتاجه بشكل رئيسي في الكليتين.',
-                explanation: 'صحيح؛ الإريتروبويتين هو المسؤول عن تكون الكريات الحمراء، ويتم إنتاجه من قبل الكليتين (والكبد)، وقصور الكلية يمنع إنتاجه.',
-            }, {
-                id: 6,
-                question: 'أثناء دراسة نضوج الكريات الحمراء، في أي مرحلة يتوقف تماماً اصطناع الهيموغلوبين (الخضاب الدموي) داخل الخلية؟',
-                options: [
-                    { letter: 'أ', text: 'مرحلة الأرومة الحمراء (Erythroblast).' },
-                    { letter: 'ب', text: 'مرحلة الخلية الشبكية (Reticulocyte).' },
-                    { letter: 'ج', text: 'مرحلة الخلية الجذعية متعددة القدرات.' },
-                    { letter: 'د', text: 'مرحلة الأرومة النقوية (Myeloblast).' },
-                ],
-                correctIndex: 1,
-                hint: 'ابحث عن السلف الخلوي الذي يسبق الكرية الحمراء الناضجة مباشرة.',
-                explanation: 'صحيح؛ تقف الكرية الحمراء عن اصطناع الهيموغلوبين في مرحلة الشبكية، وتحتوي بعدها على كمية ثابتة منه.',
-            }, {
-                id: 7,
-                question: 'إذا كشف فحص لطاخة دم محيطية لمريض عن وجود خلايا حمراء تبدي "ترقشاً أساسياً" (Basophilic Stippling)، فما المكون الخلوي الأصلي الذي يعبر عنه هذا المظهر؟',
-                options: [
-                    { letter: 'أ', text: 'بقايا جزيئات الحديد غير المندمجة في الهيم.' },
-                    { letter: 'ب', text: 'بقايا الحمض الريبي النووي (RNA).' },
-                    { letter: 'ج', text: 'بقايا الغشاء النووي المتهدم.' },
-                    { letter: 'د', text: 'بقايا نووية دائرية صغيرة.' },
-                ],
-                correctIndex: 1,
-                hint: 'تذكر المواد الوراثية المتبقية في الهيولى والتي تظهر كحبيبات زرقاء رمادية.',
-                explanation: 'صحيح؛ الترقش الأساسي (Basophilic Stippling) يمثل حبيبات تحوي بقايا RNA وتصادف في التلاسيميا والتسمم بالرصاص.',
-            }, {
-                id: 8,
-                question: 'لماذا تظهر "الخلايا الدمعية" (Dacrocytes) في اللطاخة الدموية لبعض المرضى؟',
-                options: [
-                    { letter: 'أ', text: 'بسبب فقدان الكرية للماء إثر خلل أسموزي في غشائها الخلوي.' },
-                    { letter: 'ب',
-                        text: 'نتيجة عصر الكريات ومواجهتها صعوبة بالمرور عبر نسيج متليف كحالات تليف النقي.' },
-                    { letter: 'ج', text: 'بسبب عوز وراثي حاد في إنزيم بيروفات كينات.' },
-                    { letter: 'د', text: 'بسبب زيادة ترسب سلاسل ألفا الغلوبينية الحرة.' },
-                ],
-                correctIndex: 1,
-                hint: 'ترتبط هذه الخلايا بعملية عصر ميكانيكية شديدة تتعرض لها الكرية الحمراء.',
-                explanation: 'صحيح؛ تصادف الخلايا الدمعية بشكل خاص في حالات تليف النقي حيث تتشوه الكرية لتأخذ شكل الدمعة أو الإجاصة.',
-            }, {
-                id: 9,
-                question: 'أثناء فحص مريض يشتبه بإصابته بفقر الدم الوبيل (Pernicious Anemia)، تم الكشف عن أضداد تمنع ارتباط فيتامين B12 بالعامل الداخلي (Intrinsic Factor). ما هو نوع هذه الأجسام المضادة؟',
-                options: [
-                    { letter: 'أ', text: 'الأجسام المضادة الحاصرة (Blocking Antibodies).' },
-                    { letter: 'ب', text: 'الأجسام المضادة للخلايا الجدارية.' },
-                    { letter: 'ج', text: 'الأجسام المضادة المرسبة (Precipitation Antibodies).' },
-                    { letter: 'د', text: 'أجسام مضادة نوعية لمستقبلات الترانسفيرين.' },
-                ],
-                correctIndex: 0,
-                hint: 'أضداد تمنع الـ (Binding) بين الفيتامين والعامل الداخلي.',
-                explanation: 'صحيح؛ الأجسام المضادة الحاصرة تمنع ارتباط فيتامين B12 مع العامل الداخلي (IF)، وتوجد لدى 50-60% من المرضى.',
-            }, {
-                id: 10,
-                question: 'مريض يعاني من فقر دم انحلالي خلقي تبين أنه ناجم عن اضطراب وراثي يسبب نقص مساحة غشاء الكرية الحمراء، مع ارتفاع ملحوظ في قيمة (MCHC). ما هو التشخيص المرجح؟',
-                options: [
-                    { letter: 'أ', text: 'فقر الدم المنجلي (HbSS).' },
-                    { letter: 'ب', text: 'داء تكور الكريات الوراثي (Hereditary Spherocytosis).' },
-                    { letter: 'ج', text: 'التلاسيميا الكبرى.' },
-                    { letter: 'د', text: 'فقر الدم بعوز الحديد.' },
-                ],
-                correctIndex: 1,
-                hint: 'مرض انحلالي يتميز بخلايا فاقدة لمركزها الشاحب.',
-                explanation: 'صحيح؛ في هذا الداء تنقص مساحة الغشاء بالنسبة للحجم وتصبح الكريات مكورة صغيرة خالية من الشحوب المركزي، مع ارتفاع مميز في تركيز الخضاب الكريوي الوسطي (MCHC) الذي يعكس جفاف الكرية.',
-            }, {
-                id: 11,
-                question: 'أي من الجزيئات التالية يلعب دوراً هاماً في عملية الطهي (Opsonization) لتسهيل بلعمة العضويات الدقيقة من قبل البالعات؟',
-                options: [
-                    { letter: 'أ', text: 'البروتين C الفعال (CRP).' },
-                    { letter: 'ب', text: 'الهيستامين.' },
-                    { letter: 'ج', text: 'البروتين القاعدي الرئيسي (MBP).' },
-                    { letter: 'د', text: 'الإريتروبويتين.' },
-                ],
-                correctIndex: 0,
-                hint: 'بروتين يتم إنتاجه من قبل الخلايا الكبدية في سياق التفاعلات الالتهابية.',
-                explanation: 'صحيح؛ البروتين C الفعال (CRP) المُنتج في الكبد يساهم في عملية الطهي لتسهيل البلعمة.',
-            }, {
-                id: 12,
-                question: 'ما هي الأنزيمات والبروتينات التي تتركز في الحبيبات الأولية لعديدات النوى المعتدلة (العدلات)؟',
-                options: [
-                    { letter: 'أ', text: 'اللاكتوفيرين والبروتياز.' },
-                    { letter: 'ب', text: 'البيروكسيداز، الديفنسين، والبروتين المسبب للنفاذية الجرثومية (BPI).' },
-                    { letter: 'ج', text: 'الهيستامين والهيبارين.' },
-                    { letter: 'د', text: 'الإيلاستاز والكولاجيناز.' },
-                ],
-                correctIndex: 1,
-                hint: 'تتضمن إنزيماً هاماً يعطي اللون المميز للقيح وبروتينات مسببة للنفاذية الجرثومية.',
-                explanation: 'صحيح؛ الحبيبات الأولية للعدلات هي ليزوزومات غنية بالبيروكسيداز، الليزوزيم، الديفنسين، والـ BPI.',
-            }, {
-                id: 13,
-                question: 'ما هي الوظيفة الأساسية للبروتينات الغشائية (Spectrin) و (Ankyrin) في الكرية الحمراء؟',
-                options: [
-                    { letter: 'أ', text: 'مسؤولة عن التبادل الغازي بين البلازما والكرية.' },
-                    { letter: 'ب', text: 'تشكل المواقع الأساسية لمستضدات الزمر الدموية.' },
-                    { letter: 'ج', text: 'ربط الكرية الحمراء بالخلايا البطانية الوعائية.' },
-                    { letter: 'د', text: 'المحافظة على هيكل الكرية وقدرتها على التشوه.' },
-                ],
-                correctIndex: 3,
-                hint: 'شبكة بروتينية تقع تحت الغشاء البلازمي وتتأثر في أمراض مثل تكور الكريات الوراثي.',
-                explanation: 'صحيح؛ السبيكترين والأنكيرين مع الأكتين يشكلون شبكة مسؤولة عن قدرة الكريات الحمر على التشوه وتشكيل هيكل الكرية.',
-            }, {
-                id: 14,
-                question: 'أي من الطرق الاستقلابية التالية في الكرية الحمراء تولّد غاز ثنائي أكسيد الكربون (CO2) وتلعب دوراً في حماية الخلية من الأكسدة بإنتاج NADPH؟',
-                options: [
-                    { letter: 'أ', text: 'طريق Embden Meyerhof.' },
-                    { letter: 'ب', text: 'مسار Warburg Dickens (طريق البنتوز فوسفات).' },
-                    { letter: 'ج', text: 'دورة كربس (Krebs Cycle).' },
-                    { letter: 'د', text: 'مسار اصطناع البورفيرين.' },
-                ],
-                correctIndex: 1,
-                hint: 'مسار استقلابي هوائي يمثل 10% من تحطم الغلوكوز في الكرية.',
-                explanation: 'صحيح؛ هذا المسار الهوائي يمثل 10% من استقلاب الغلوكوز، وينتج حمض اللبن وغاز الفحم (CO2) بالإضافة إلى الـ NADPH.',
-            }, {
-                id: 15,
-                question: 'ما هي الوظيفة الفيزيولوجية لمركب 2,3-DPG (Disphosphoglycerate) داخل الكرية الحمراء؟',
-                options: [
-                    { letter: 'أ', text: 'يغير ألفة الخضاب للأوكسجين ويسهل تخليه عنه في الأنسجة.' },
-                    { letter: 'ب', text: 'يحافظ على الحديد في الحالة الثنائية الفعالة.' },
-                    { letter: 'ج', text: 'يؤمن الطاقة اللازمة لعمل مضخة الصوديوم/بوتاسيوم.' },
-                    { letter: 'د', text: 'يمنع أكسدة سلاسل الغلوبين وتشكيل أجسام هاينز.' },
-                ],
-                correctIndex: 0,
-                hint: 'يتوضع هذا المركب في الحفرة المركزية لجزيء الخضاب ويؤثر على ارتباطه بالأوكسجين.',
-                explanation: 'صحيح؛ يتمركز 2,3-DPG في الحفرة المركزية للخضاب غير المؤكسج مما ينظم (يقلل) ألفة الخضاب للأوكسجين لتسهيل تحريره.',
-            }, {
-                id: 16,
-                question: 'ما هو التركيب الجيني الطبيعي لجزيء الهيموغلوبين F (الخضاب الجنيني)؟',
-                options: [
-                    { letter: 'أ', text: 'سلسلتان ألفا وسلسلتان بيتا (2α 2β).' },
-                    { letter: 'ب', text: 'سلسلتان ألفا وسلسلتان دلتا (2α 2δ).' },
-                    { letter: 'ج', text: 'سلسلتان ألفا وسلسلتان غاما (2α 2γ).' },
-                    { letter: 'د', text: 'أربع سلاسل غاما (4γ).' },
-                ],
-                correctIndex: 2,
-                hint: 'سلسلتان من نوع ألفا وسلسلتان من نوع آخر يسود في الحياة الجنينية.',
-                explanation: 'صحيح؛ الخضاب الجنيني (HbF) يتكون من سلسلتي ألفا وسلسلتي غاما.',
-            }, {
-                id: 17,
-                question: 'مريض يعاني من نزف هضمي مزمن، أظهرت التحاليل المخبرية نقصاً في الحديد. كيف ستتغير السعة الإجمالية الرابطة للحديد (TIBC) في هذه الحالة؟',
-                options: [
-                    { letter: 'أ', text: 'تنخفض بشكل حاد.' },
-                    { letter: 'ب', text: 'تبقى ضمن الحدود الطبيعية.' },
-                    { letter: 'ج', text: 'ترتفع دائماً إذا انخفض تركيز الخضاب عن 9 غ/دل.' },
-                    { letter: 'د', text: 'ترتفع فقط إذا ترافق عوز الحديد مع التهاب كبد فيروسي.' },
-                ],
-                correctIndex: 2,
-                hint: 'يعبر TIBC عن كمية الترانسفيرين المتاحة للارتباط بالحديد في المصل.',
-                explanation: 'صحيح؛ السعة الإجمالية الرابطة للحديد ترتفع دائماً كعلامة تشخيصية هامة عند انخفاض الخضاب بسبب عوز الحديد، لزيادة قدرة الجسم على اقتناص أي حديد متاح.',
-            }, {
-                id: 18,
-                question: 'ما هي دلالة انخفاض عيار "الفيريتين" (Ferritin) في المصل؟',
-                options: [
-                    { letter: 'أ', text: 'يعطي فكرة واضحة عن نفاد مخزون الحديد ويعتبر مشخصاً لعوز الحديد.' },
-                    { letter: 'ب', text: 'يدل على وجود التهاب أو خمج حاد في الجسم.' },
-                    { letter: 'ج', text: 'يشخص بشكل مؤكد الإصابة بالتلاسيميا الصغرى.' },
-                    { letter: 'د', text: 'يدل على عوز فيتامين B12.' },
-                ],
-                correctIndex: 0,
-                hint: 'يعكس الفيريتين حالة مخزون الحديد في الأنسجة.',
-                explanation: 'صحيح؛ الفيريتين المصل يعكس بشكل رائع مخزون الحديد، وانخفاضه يدل على بدء استهلاك المدخرات قبل ظهور فقر الدم.',
-            }, {
-                id: 19,
-                question: 'في أي جزء من السبيل الهضمي يتم امتصاص معقد (فيتامين B12 + العامل الداخلي)؟',
-                options: [
-                    { letter: 'أ', text: 'في المعدة مباشرة.' },
-                    { letter: 'ب', text: 'في العفج (القسم الأول من الأمعاء الدقيقة).' },
-                    { letter: 'ج', text: 'في القسم القاصي من اللفائفي (Terminal Ileum).' },
-                    { letter: 'د', text: 'في الكولون الصاعد.' },
-                ],
-                correctIndex: 2,
-                hint: 'يمتص في القسم الأخير من الأمعاء الدقيقة بواسطة مستقبلات خاصة (Cubilin).',
-                explanation: 'صحيح؛ يمتص المعقد عبر مستقبلات خاصة (Cubilin) متواجدة على خلايا القسم القاصي للفائفي.',
-            }, {
-                id: 20,
-                question: 'مريض يعاني من فقر دم كبير الخلايا (Macrocytic Anemia). أظهرت اللطاخة الدموية وجود معتدلات (عدلات) مفرطة الفصيصات (أكثر من 5 فصوص). ما هو التشخيص المرجح؟',
-                options: [
-                    { letter: 'أ', text: 'فقر دم انحلالي مناعي ذاتي.' },
-                    { letter: 'ب', text: 'فقر الدم بعوز الحديد المتقدم.' },
-                    { letter: 'ج', text: 'فقر الدم العرطل (عوز فيتامين B12 أو الفولات).' },
-                    { letter: 'د', text: 'التلاسيميا الكبرى.' },
-                ],
-                correctIndex: 2,
-                hint: 'هذا المظهر في اللطاخة يميز فاقات الدم الناجمة عن خلل في اصطناع الـ DNA.',
-                explanation: 'صحيح؛ زيادة تفصص المعتدلات وكبر حجم الكريات الحمر من العلامات المميزة جداً لفاقات الدم العرطلة (Megaloblastic Anemia) الناتجة عن عوز B12 أو الفولات.',
-            }, {
-                id: 21,
-                question: 'ما هو العرض السريري الذي يميز فقر الدم بعوز فيتامين B12 عن فقر الدم بعوز حمض الفوليك؟',
-                options: [
-                    { letter: 'أ', text: 'ظهور اليرقان الخفيف.' },
-                    { letter: 'ب', text: 'الإصابة باعتلالات عصبية (مثل تنكس النخاع الشوكي المترقي).' },
-                    { letter: 'ج', text: 'ضخامة الطحال الشديدة.' },
-                    { letter: 'د', text: 'ظهور التهاب اللسان المتقرح.' },
-                ],
-                correctIndex: 1,
-                hint: 'فيتامين B12 يدخل في استقلاب الأحماض الدهنية الضرورية لغمد النخاعين (المايلين).',
-                explanation: 'صحيح؛ الإصابات العصبية (التهاب الأعصاب المحيطية، تنكس النخاع) تميز عوز B12 ولا تحدث في عوز الفولات.',
-            }, {
-                id: 22,
-                question: 'في حالات فقر الدم الانحلالي داخل الأوعية (Intravascular Hemolysis)، أي من المؤشرات المخبرية التالية يشهد انخفاضاً ملحوظاً وسريعاً؟',
-                options: [
-                    { letter: 'أ', text: 'إنزيم نازعة هيدروجين اللاكتات (LDH).' },
-                    { letter: 'ب', text: 'البيليروبين غير المباشر.' },
-                    { letter: 'ج', text: 'الشبكيات (Reticulocytes).' },
-                    { letter: 'د', text: 'الهابتن غلوبين (Haptoglobin).' },
-                ],
-                correctIndex: 3,
-                hint: 'بروتين بلازمي وظيفته التقاط الخضاب الحر لمنع أذية الكلى.',
-                explanation: 'صحيح؛ الهابتن غلوبين يرتبط بالهيموغلوبين المتحرر لتشكيل معقد يتم تصفيته بسرعة من الدوران، مما يؤدي لانخفاض نسبته بشدة.',
-            }, {
-                id: 23,
-                question: 'في داء تكور الكريات الوراثي (Hereditary Spherocytosis)، ما هو الاختبار المخبري النوعي الذي يعطي نتيجة إيجابية بتأكيد انحلال الكريات عند وضعها في محاليل ملحية ناقصة التوتر؟',
-                options: [
-                    { letter: 'أ', text: 'اختبار كومبس المباشر (Direct Coombs Test).' },
-                    { letter: 'ب', text: 'اختبار الهشاشة الكروية (Osmotic Fragility Test).' },
-                    { letter: 'ج', text: 'اختبار التمنجل (Sickling Test).' },
-                    { letter: 'د', text: 'الرحلان الكهربائي للخضاب.' },
-                ],
-                correctIndex: 1,
-                hint: 'اختبار يقيس مدى قدرة الكرية الحمراء على تحمل التمدد قبل الانفجار.',
-                explanation: 'صحيح؛ الكريات المكورة الوراثية ذات هشاشة تناضحية زائدة، وتنفجر بسرعة عند وضعها في محاليل ناقصة التوتر.',
-            }, {
-                id: 24,
-                question: 'مريض مشخص بفقر الدم المنجلي متجانس الأمشاج (Hb S/S). ما هو الأساس الجزيئي الوراثي لهذه الطفرة؟',
-                options: [
-                    { letter: 'أ', text: 'استبدال الغلوتاميك بالفالين في الموقع السادس من سلسلة بيتا.' },
-                    { letter: 'ب', text: 'غياب كلي لاصطناع سلاسل ألفا.' },
-                    { letter: 'ج', text: 'استبدال الفالين بالغلوتاميك في الموقع السادس من سلسلة ألفا.' },
-                    { letter: 'د', text: 'استبدال الغلوتاميك باللايزين في سلسلة بيتا.' },
-                ],
-                correctIndex: 0,
-                hint: 'استبدال حمض أميني في السلسلة بيتا يغير من خصائص الهيموغلوبين.',
-                explanation: 'صحيح؛ الطفرة تنجم عن استبدال الحمض الأميني الغلوتاميك بالفالين في الموقع السادس للسلسلة بيتا.',
-            }, {
-                id: 25,
-                question: 'طفل عمره سنة واحدة يعاني من نوبات ألم شديدة وبكاء مستمر مع انتفاخ والتهاب في أصابع اليدين والقدمين. إذا علمنا أنه مصاب بفقر الدم المنجلي، فبماذا يُعرف هذا العرض سريرياً؟',
-                options: [
-                    { letter: 'أ', text: 'نوبة الانحلال الحادة المحدثة بالفول.' },
-                    { letter: 'ب', text: 'التهاب الأصابع (Dactylitis) الناجم عن انسداد الأوعية الشعرية.' },
-                    { letter: 'ج', text: 'داء الهيموسيديرين (Hemochromatosis).' },
-                    { letter: 'د', text: 'تليف النقي الأولي.' },
-                ],
-                correctIndex: 1,
-                hint: 'أولى العلامات السريرية التي تنذر بالانسداد الوعائي للأطراف عند الأطفال.',
-                explanation: 'صحيح؛ من أولى العلامات التي تنبئ بفقر الدم المنجلي عند الأطفال هو التهاب وانتفاخ أصابع اليدين والقدمين بسبب انسداد الشرايين الشعرية بالكريات المنجلية.',
-            }, {
-                id: 26,
-                question: 'ما هو النمط النموذجي لرحلان الخضاب الكهربائي (Hb Electrophoresis) عند مريض مصاب بـ "التلاسيميا بيتا الكبرى" بعد عمر ستة أشهر؟',
-                options: [
-                    { letter: 'أ', text: 'HbS = 90%, HbF = 10%, HbA = 0%' },
-                    { letter: 'ب', text: 'HbA = 0%, HbF = 80-95%, HbA₂ < 7%' },
-                    { letter: 'ج', text: 'HbA > 95%, HbA₂ > 3.5%, HbF = 1%' },
-                    { letter: 'د', text: 'HbH = 30%, HbA = 70%' },
-                ],
-                correctIndex: 1,
-                hint: 'في هذه الحالة يغيب اصطناع سلاسل بيتا كلياً أو ينقص بشدة، مما يمنع تشكل الخضاب البالغ الطبيعي.',
-                explanation: 'صحيح؛ في التلاسيميا بيتا الكبرى يغيب الخضاب البالغ HbA، ويسيطر الخضاب الجنيني HbF بنسب عالية لتعويض النقص.',
-            }, {
-                id: 27,
-                question: 'في متلازمة الخضاب الجنيني (Hb Barts) الناجمة عن غياب الجينات الأربعة لسلاسل ألفا (--/--)، ما هو التركيب الجزيئي لخضاب بارت الذي يسبب الوفاة الجنينية؟',
-                options: [
-                    { letter: 'أ', text: 'أربع سلاسل بيتا (4β).' },
-                    { letter: 'ب', text: 'أربع سلاسل غاما (4γ).' },
-                    { letter: 'ج', text: 'سلسلتان ألفا وسلسلتان غاما (2α 2γ).' },
-                    { letter: 'د', text: 'سلسلتان دلتا وسلسلتان غاما (2δ 2γ).' },
-                ],
-                correctIndex: 1,
-                hint: 'تتجمع السلاسل الفائضة المتاحة في الجنين لتشكيل خضاب شاذ ذي ألفة شديدة للأوكسجين.',
-                explanation: 'صحيح؛ خضاب بارت يتكون من 4 سلاسل غاما، ويتميز بألفة شديدة للأوكسجين لا يتخلى عنه للأنسجة، مما يسبب وفاة الجنين.',
-            }, {
-                id: 28,
-                question: 'مريض لديه عوز إنزيم G6PD (التفول)، تعرض لنوبة انحلال حادة بعد تناول مضادات الملاريا. ما هي الآلية الممرضة الدقيقة لحدوث الانحلال في هذه الحالة؟',
-                options: [
-                    { letter: 'أ', text: 'نقص طاقة ATP مما يعطل مضخة الصوديوم وتنفجر الكرية.' },
-                    { letter: 'ب',
-                        text: 'انخفاض NADPH يؤدي لعجز الغلوتاثيون المرجع عن حماية الكرية من العوامل المؤكسدة.' },
-                    { letter: 'ج', text: 'زيادة إنتاج 2,3-DPG مما يفقد الغشاء مرونته.' },
-                    { letter: 'د', text: 'تدمير الغشاء بواسطة أضداد ذاتية مناعية.' },
-                ],
-                correctIndex: 1,
-                hint: 'الإنزيم يحمي الكرية من الشوارد المؤكسدة عبر الحفاظ على مستويات مركب محدد.',
-                explanation: 'صحيح؛ نقص G6PD يقلل NADPH الضروري لعمل مرجعة الغلوتاثيون، فتتعرض سلاسل الغلوبين للأكسدة وتتشكل أجسام هاينز وتخرب الكرية.',
-            }, {
-                id: 29,
-                question: 'ما هي الموجودات الوصفية المميزة في اللطاخة المحيطية لمريض يعاني من نوبة انحلال حادة بسبب عوز إنزيم G6PD؟',
-                options: [
-                    { letter: 'أ', text: 'خلايا هدفية (Target cells) وخلايا دمعية.' },
-                    { letter: 'ب', text: 'أجسام هاينز (Heinz bodies) وخلايا معضوضة (Bite cells).' },
-                    { letter: 'ج', text: 'أجسام هاول-جولي وكريات حمراء منواة.' },
-                    { letter: 'د', text: 'خلايا كروية (Spherocytes) مع إيجابية اختبار كومبس.' },
-                ],
-                correctIndex: 1,
-                hint: 'الأكسدة تسبب ترسب الخضاب في الخلية، وتقوم البالعات في الطحال بقضم هذا الترسب.',
-                explanation: 'صحيح؛ أجسام هاينز هي خضاب مترسب مؤكسد، والخلايا المعضوضة تنتج عن قضم الطحال لهذه الأجسام.',
-            }, {
-                id: 30,
-                question: 'في "احمرار الدم البدئي" (Polycythemia Vera)، أي من العبارات التالية تصف الآلية المرضية والموجودات بشكل صحيح؟',
-                options: [
-                    { letter: 'أ', text: 'تكاثر عشوائي مقتصر حصراً على الكريات الحمراء، مع غياب ضخامة الطحال.' },
-                    { letter: 'ب', text: 'مرض يصيب الشباب غالباً بسبب نقص الأكسجة المزمن في المرتفعات.' },
-                    { letter: 'ج',
-                        text: 'مرض يصادف بعد الخمسين، يتميز بتكاثر عشوائي يشمل السلالة الحمراء والمحببة واللمفاوية مع ضخامة طحال وكبد.' },
-                    { letter: 'د', text: 'ينتج عن فرط إفراز هرمون الإريتروبويتين من أورام الكلية.' },
-                ],
-                correctIndex: 2,
-                hint: 'هو مرض تكاثري نقوي شامل لا يقتصر على الكريات الحمراء فقط، ويترافق مع ضخامة عضو معين.',
-                explanation: 'صحيح؛ احمرار الدم البدئي هو داء تكاثري نقوي يتميز بتكاثر الخلايا الحمراء والمحببة واللمفاوية ويترافق مع ضخامة كبد وطحال وأعراض فرط اللزوجة.',
-            }];
+<!-- REVIEW SCREEN -->
+<div id="reviewScreen" class="hidden">
+  <div class="review-header">
+    <div class="badge">أحسنت! أكملت الاختبار</div>
+    <h2>مراجعة شاملة للأسئلة والحلول</h2>
+    <p>كل الأسئلة مع الإجابة الصحيحة والتعليل العلمي الكامل للمراجعة النهائية.</p>
+  </div>
+  <main style="padding-top:0;" id="reviewList"></main>
+  <footer class="finish-note">انتهت المراجعة — بالتوفيق! 🩸</footer>
+</div>
 
-            let currentQuestionIndex = 0;
-            let score = 0;
-            let answered = false;
-            let hintUsed = false;
-            let selectedOptionIndex = null;
-            let quizFinished = false;
-            const quizRoot = document.getElementById('quizRoot');
+<script>
+window.addEventListener('error', function(e){
+  var box = document.createElement('div');
+  box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#b23a3a;color:#fff;padding:12px;font-size:12px;z-index:9999;direction:ltr;text-align:left;';
+  box.textContent = 'JS Error: ' + e.message + ' (line ' + e.lineno + ')';
+  document.body.appendChild(box);
+});
 
-            function renderQuiz() {
-                if (quizFinished) {
-                    renderResultScreen();
-                    return;
-                }
-                const q = questionBank[currentQuestionIndex];
-                const total = questionBank.length;
-                const progressPercent = Math.round((currentQuestionIndex / total) * 100);
+const QUESTIONS = [
+{tag:"محور 1: تشكل الدم", text:"إذا خضع مريض مصاب بورم خبيث لمعالجة شعاعية تستهدف الخلايا سريعة الانقسام، فلماذا تنجو الخلايا الجذعية المكونة للدم (Stem cells) من هذا التأثير المدمر؟",
+ hint:"ابحث عن الحالة التي تمر بها هذه الخلايا في دورتها الخلوية وتأثيرها على استقرارها جينياً.",
+ options:["لأنها خلايا متمايزة تفرز مركبات واقية تمنع الإشعاع.","لتواجدها في مرحلة الراحة G0 في الدورة الخلوية مما يجعلها مقاومة للمركبات الكيميائية والشعاعية.","لأنها تهاجر فوراً إلى الغدد اللمفاوية المحيطية عند استشعار الخطر الشعاعي.","لأنها تمتلك مخزوناً هائلاً من الترومبوبويتين الذي يحيد الجزيئات الحرة."],
+ correct:1,
+ reason:"صحيح علمياً؛ وجود الخلايا الجذعية في مرحلة الراحة G0 يحميها من العلاجات التي تستهدف الأطوار النشطة للانقسام الخلوي في الحالات السرطانية.",
+ optionExplanations:["خطأ. الخلايا الجذعية غير متمايزة وليست وظيفتها الأساسية إفراز مضادات الإشعاع.","صحيح علمياً؛ وجود الخلايا الجذعية في مرحلة الراحة G0 يحميها من العلاجات التي تستهدف الأطوار النشطة للانقسام الخلوي في الحالات السرطانية.","خطأ. الخلايا الجذعية لا تهاجر بشكل دفاعي فوري للغدد اللمفاوية عند التعرض للأشعة.","خطأ. الترومبوبويتين هو عامل نمو مسؤول عن تكون الصفيحات، وليس مضاداً إشعاعياً داخل الخلية الجذعية."]},
+{tag:"محور 1: تشكل الدم", text:"أثناء التطور الجنيني البشري، أين يتركز تشكل خلايا الدم (Hematopoiesis) في الشهر السادس من الحمل؟",
+ hint:"تذكر تسلسل أعضاء نشوء الدم جينياً قبل أن ينفرد نقي العظم بالعملية بعد الولادة.",
+ options:["الحويصل المحي بشكل رئيسي وجدران الأبهر.","الكبد والطحال.","نقي العظام الطويلة مثل عظم الفخذ والظنبوب حصراً.","الغدة الزعترية (التوتة)."],
+ correct:1,
+ reason:"صحيح؛ في الشهر السادس من المرحلة الجنينية يمثل الكبد والطحال المراكز الرئيسية لتشكل خلايا الدم.",
+ optionExplanations:["خطأ. الحويصل المحي يسيطر في الشهر الثاني فقط ثم يتراجع النشوء فيه.","صحيح؛ في الشهر السادس من المرحلة الجنينية يمثل الكبد والطحال المراكز الرئيسية لتشكل خلايا الدم.","خطأ. نقي العظم يبدأ في العمل ليصبح المركز الأساسي بعد الولادة، وليس في الشهر السادس الجنيني.","خطأ. التوتة هي مكان لتمايز الخلايا اللمفاوية إلى خلايا تائية ناضجة وليست مركزاً عاماً لإنتاج كافة خلايا الدم."]},
+{tag:"محور 1: تشكل الدم", text:"ما الذي يحدث لقدرات التجدد الذاتي (Self-renewal) والتمايز (Differentiation) عندما تتحول الخلايا الجذعية إلى أرومات نقوية ولمفاوية؟",
+ hint:"العلاقة عكسية بين نضوج الخلية وتخصصها وقدرتها على استنساخ نفسها بشكل أبدي.",
+ options:["تزداد القدرة على التجدد الذاتي وتتراجع القدرة على التمايز.","تتحسن كلتا القدرتين بشكل متوازٍ لضمان غزارة الإنتاج.","تفقد الخلايا قدرتها على التجدد الذاتي بينما تكتسب قدرة أكبر على التمايز.","تفقد الخلايا القدرتين معاً وتتحول فوراً إلى خلايا هرمة."],
+ correct:2,
+ reason:"صحيح؛ في هذه المرحلة تفقد الخلايا قدرتها على التجدد الذاتي في حين تكتسب قدرة أكبر على التمايز.",
+ optionExplanations:["خطأ. كلما تقدم النشوء تضعف قدرة الخلايا على تجديد نفسها وتتجه للتخصص.","خطأ. التجدد الذاتي يتناقص مع التقدم في التمايز.","صحيح؛ في هذه المرحلة تفقد الخلايا قدرتها على التجدد الذاتي في حين تكتسب قدرة أكبر على التمايز.","خطأ. الخلايا لا تفقد القدرتين معاً بل تتبادلان الأدوار."]},
+{tag:"محور 1: تشكل الدم", text:"أي من العوامل التالية يعتبر المنظم الرئيسي لإنتاج الكريات الحمراء (Erythropoiesis) ويفرز بشكل أساسي من الكلية استجابة لنقص الأوكسجين؟",
+ hint:"هرمون بروتيني سكري يحفز نقي العظم.",
+ options:["الترومبوبويتين (TPO).","الإريثروبويتين (EPO).","الإنترلوكين 3 (IL-3).","عامل تحفيز المستعمرات (G-CSF)."],
+ correct:1,
+ reason:"صحيح؛ الإريثروبويتين هو الهرمون الأساسي الذي تفرزه الكلية لتحفيز إنتاج الكريات الحمراء عند نقص الأوكسجين.",
+ optionExplanations:["خطأ. الترومبوبويتين ينظم إنتاج الصفيحات.","صحيح؛ الإريثروبويتين هو الهرمون الأساسي الذي تفرزه الكلية لتحفيز إنتاج الكريات الحمراء عند نقص الأوكسجين.","خطأ. IL-3 هو عامل نمو عام يؤثر على عدة سلالات خلوية وليس خاصاً بالحمراء.","خطأ. G-CSF يحفز إنتاج الخلايا المحببة (العدلات)."]},
+{tag:"محور 1: تشكل الدم", text:"أين يتم إنتاج الإريثروبويتين (EPO) عند الجنين قبل أن تنتقل المهمة إلى الكلية بعد الولادة؟",
+ hint:"عضو يلعب دوراً مركزياً في استقلاب الجنين ونشوء دمه.",
+ options:["الطحال.","الرئتين.","الكبد.","البنكرياس."],
+ correct:2,
+ reason:"صحيح؛ الكبد هو المنتج الرئيسي للإريثروبويتين خلال المرحلة الجنينية.",
+ optionExplanations:["خطأ. الطحال يشارك في إنتاج الخلايا لكنه ليس المصدر الرئيسي لـ EPO.","خطأ. الرئتين لا تنتجان هرمونات منظمة لتشكل الدم.","صحيح؛ الكبد هو المنتج الرئيسي للإريثروبويتين خلال المرحلة الجنينية.","خطأ. البنكرياس غدة صماء وهضمية لا علاقة لها بـ EPO."]},
+{tag:"محور 2: فيزيولوجيا الكرية الحمراء", text:"ما هي الوظيفة الأساسية لـ \"استقلاب الغلوكوز\" في الكرية الحمراء الناضجة، رغم افتقارها للمتقدرات؟",
+ hint:"الكرية تعتمد على التحلل اللاهوائي لإنتاج الطاقة والحفاظ على سلامة غشائها.",
+ options:["إنتاج الأوكسجين داخلياً.","توليد ATP للحفاظ على شكل الكرية ومرونة غشائها عبر مضخات الشوارد.","بناء بروتينات الهيموغلوبين الجديدة.","تخزين الدهون كمصدر احتياطي للطاقة."],
+ correct:1,
+ reason:"صحيح؛ الكرية الحمراء تعتمد على تحلل الغلوكوز لإنتاج ATP الضروري لعمل مضخات الشوارد والحفاظ على شكلها ومرونتها.",
+ optionExplanations:["خطأ. الكريات تنقل الأوكسجين ولا تنتجه.","صحيح؛ الكرية الحمراء تعتمد على تحلل الغلوكوز لإنتاج ATP الضروري لعمل مضخات الشوارد والحفاظ على شكلها ومرونتها.","خطأ. الكرية الناضجة لا تحتوي على ريبوزومات ولا تصنع البروتينات.","خطأ. الكريات لا تخزن الدهون للطاقة."]},
+{tag:"محور 2: فيزيولوجيا الكرية الحمراء", text:"لماذا تعتبر دورة \"بنتوز فوسفات\" (Pentose Phosphate Pathway) حيوية جداً للكرية الحمراء؟",
+ hint:"ترتبط هذه الدورة بإنتاج مركب NADPH الذي يحمي الخلية من الأكسدة.",
+ options:["لأنها تنتج ثاني أكسيد الكربون الضروري للتنفس.","لأنها توفر NADPH اللازم للحفاظ على الغلوتاثيون المرجع الذي يحمي الكرية من الأذى التأكسدي.","لأنها المسار الوحيد لإنتاج الهيم.","لأنها تزيد من ألفة الهيموغلوبين للأوكسجين."],
+ correct:1,
+ reason:"صحيح؛ هذه الدورة تنتج NADPH الضروري لبقاء الغلوتاثيون في حالته المرجعة، مما يحمي الكرية من الجذور الحرة.",
+ optionExplanations:["خطأ. إنتاج CO2 ليس الوظيفة الحيوية لهذه الدورة في الكرية.","صحيح؛ هذه الدورة تنتج NADPH الضروري لبقاء الغلوتاثيون في حالته المرجعة، مما يحمي الكرية من الجذور الحرة.","خطأ. اصطناع الهيم يتم بمسار معقد يبدأ في المتقدرات (غير الموجودة في الناضجة).","خطأ. لا تؤثر هذه الدورة بشكل مباشر على ألفة الهيموغلوبين."]},
+{tag:"محور 2: فيزيولوجيا الكرية الحمراء", text:"ما هو الدور الذي يلعبه مركب (2,3-DPG) في تنظيم وظيفة الهيموغلوبين؟",
+ hint:"يرتبط هذا المركب بالهيموغلوبين ويغير من قوة تمسكه بالأوكسجين.",
+ options:["يزيد من ألفة الهيموغلوبين للأوكسجين ويمنع تحرره.","يقلل من ألفة الهيموغلوبين للأوكسجين مما يسهل تحرره للأنسجة عند الحاجة.","يحفز امتصاص الحديد في الأمعاء.","يمنع تخرب الكرية في الطحال."],
+ correct:1,
+ reason:"صحيح؛ زيادة 2,3-DPG تقلل ألفة الهيموغلوبين للأوكسجين، مما يساعد على تزويد الأنسجة بالأوكسجين بشكل أفضل.",
+ optionExplanations:["خطأ. العكس هو الصحيح، فهو يسهل التحرر.","صحيح؛ زيادة 2,3-DPG تقلل ألفة الهيموغلوبين للأوكسجين، مما يساعد على تزويد الأنسجة بالأوكسجين بشكل أفضل.","خطأ. لا علاقة له بامتصاص الحديد.","خطأ. وظيفته مرتبطة بنقل الغازات وليس بحماية الغشاء من الطحال."]},
+{tag:"محور 2: فيزيولوجيا الكرية الحمراء", text:"عندما يرتفع مستوى البيليروبين غير المباشر (غير المقترن) في الدم مع زيادة عدد الشبكيات، فما هو التفسير الفيزيولوجي الأرجح؟",
+ hint:"فكر في نواتج تكسر الهيموغلوبين واستجابة نقي العظم.",
+ options:["وجود فشل كلوي حاد.","حدوث انحلال دموي متزايد (Hemolysis).","نقص في تناول الخضروات الورقية.","الإصابة بالتهاب الكبد الفيروسي A فقط."],
+ correct:1,
+ reason:"صحيح؛ ارتفاع البيليروبين غير المباشر مع زيادة الشبكيات هو علامة كلاسيكية على انحلال الكريات الحمراء.",
+ optionExplanations:["خطأ. الفشل الكلوي لا يسبب ارتفاع البيليروبين والشبكيات بشكل مباشر.","صحيح؛ ارتفاع البيليروبين غير المباشر مع زيادة الشبكيات هو علامة كلاسيكية على انحلال الكريات الحمراء.","خطأ. النظام الغذائي لا يفسر هذا الارتفاع المخبري الحاد.","خطأ. التهاب الكبد يرفع البيليروبين المباشر غالباً ولا يسبب زيادة الشبكيات."]},
+{tag:"محور 2: فيزيولوجيا الكرية الحمراء", text:"ما هو المكون الأساسي في غشاء الكرية الحمراء المسؤول عن مرونتها وقدرتها على تغيير شكلها للمرور عبر الشعيرات الضيقة؟",
+ hint:"بروتينات الهيكل الخلوي التي تشكل شبكة تحت الغشاء.",
+ options:["الكوليسترول.","السبكترين (Spectrin).","الألبومين.","الفايبرينوجين."],
+ correct:1,
+ reason:"صحيح؛ بروتين السبكترين هو المكون الرئيسي للهيكل الخلوي الذي يمنح الكرية مرونتها العالية.",
+ optionExplanations:["خطأ. الكوليسترول يعطي الثبات للغشاء لكن ليس المرونة الحركية.","صحيح؛ بروتين السبكترين هو المكون الرئيسي للهيكل الخلوي الذي يمنح الكرية مرونتها العالية.","خطأ. الألبومين بروتين بلازمي وليس هيكلياً للكرية.","خطأ. الفايبرينوجين بروتين يدخل في تخثر الدم."]},
+{tag:"محور 3: الاستقصاء المخبري", text:"ماذا يعني مصطلح (Reticulocyte Count) في فحص الدم، وإلى ماذا يشير ارتفاعه الشديد؟",
+ hint:"الشبكيات هي كريات حمراء شابة لا تزال تحتوي على بقايا RNA.",
+ options:["يشير إلى عدد الكريات البيضاء الشابة، وارتفاعه يدل على خمج.","يشير إلى عدد الكريات الحمراء الفتية، وارتفاعه يدل على استجابة نشطة لنقي العظم لتعويض فقد الدم أو انحلاله.","يشير إلى نسبة الصفيحات، وارتفاعه يدل على خطر التخثر.","يشير إلى الخلايا السرطانية في الدم."],
+ correct:1,
+ reason:"صحيح؛ الشبكيات هي كريات حمراء حديثة الإنتاج، وارتفاعها يعكس نشاط نقي العظم في التعويض.",
+ optionExplanations:["خطأ. الشبكيات تخص السلسلة الحمراء فقط.","صحيح؛ الشبكيات هي كريات حمراء حديثة الإنتاج، وارتفاعها يعكس نشاط نقي العظم في التعويض.","خطأ. لا علاقة للشبكيات بالصفيحات.","خطأ. الشبكيات خلايا طبيعية وليست سرطانية."]},
+{tag:"محور 3: الاستقصاء المخبري", text:"ما هو الفحص المخبري الذي يعتبر الأدق لتقييم مخازن الحديد في الجسم في المراحل المبكرة قبل حدوث فقر الدم؟",
+ hint:"يعكس الفيريتين حالة مخزون الحديد في الأنسجة.",
+ options:["يعطي فكرة واضحة عن نفاد مخزون الحديد ويعتبر مشخصاً لعوز الحديد.","يدل على وجود التهاب أو خمج حاد في الجسم.","يشخص بشكل مؤكد الإصابة بالتلاسيميا الصغرى.","يدل على عوز فيتامين B12."],
+ correct:0,
+ reason:"صحيح؛ الفيريتين المصل يعكس بشكل رائع مخزون الحديد، وانخفاضه يدل على بدء استهلاك المدخرات قبل ظهور فقر الدم.",
+ optionExplanations:["صحيح؛ الفيريتين المصل يعكس بشكل رائع مخزون الحديد، وانخفاضه يدل على بدء استهلاك المدخرات قبل ظهور فقر الدم.","خطأ. الفيريتين هو بروتين طور حاد يرتفع (وليس ينخفض) في حالات الالتهاب والأخماج.","خطأ. في التلاسيميا الصغرى يكون الحديد والفيريتين طبيعياً أو مرتفعاً قليلاً.","خطأ. الفيريتين لا يرتبط مباشرة بتقييم عوز فيتامين B12."]},
+{tag:"محور 3: الاستقصاء المخبري", text:"في أي جزء من السبيل الهضمي يتم امتصاص معقد (فيتامين B12 + العامل الداخلي)؟",
+ hint:"يمتص في القسم الأخير من الأمعاء الدقيقة بواسطة مستقبلات خاصة (Cubilin).",
+ options:["في المعدة مباشرة.","في العفج (القسم الأول من الأمعاء الدقيقة).","في القسم القاصي من اللفائفي (Terminal Ileum).","في الكولون الصاعد."],
+ correct:2,
+ reason:"صحيح؛ يمتص المعقد عبر مستقبلات خاصة (Cubilin) متواجدة على خلايا القسم القاصي للفائفي.",
+ optionExplanations:["خطأ. المعدة تفرز العامل الداخلي وتفصل الفيتامين عن بروتينات الطعام، لكنها لا تمتصه.","خطأ. العفج والصائم هما مكانا امتصاص حمض الفوليك والحديد، وليس B12.","صحيح؛ يمتص المعقد عبر مستقبلات خاصة (Cubilin) متواجدة على خلايا القسم القاصي للفائفي.","خطأ. الأمعاء الغليظة لا تلعب دوراً في امتصاص فيتامين B12."]},
+{tag:"محور 3: الاستقصاء المخبري", text:"مريض يعاني من فقر دم كبير الخلايا (Macrocytic Anemia). أظهرت اللطاخة الدموية وجود معتدلات (عدلات) مفرطة الفصيصات (أكثر من 5 فصوص). ما هو التشخيص المرجح؟",
+ hint:"هذا المظهر في اللطاخة يميز فاقات الدم الناجمة عن خلل في اصطناع الـ DNA.",
+ options:["فقر دم انحلالي مناعي ذاتي.","فقر الدم بعوز الحديد المتقدم.","فقر الدم العرطل (عوز فيتامين B12 أو الفولات).","التلاسيميا الكبرى."],
+ correct:2,
+ reason:"صحيح؛ زيادة تفصص المعتدلات وكبر حجم الكريات الحمر من العلامات المميزة جداً لفاقات الدم العرطلة (Megaloblastic Anemia) الناتجة عن عوز B12 أو الفولات.",
+ optionExplanations:["خطأ. الانحلال المناعي الذاتي يتميز بكثرة الشبكيات وتكور الكريات، ولا يسبب فرط تفصص المعتدلات.","خطأ. عوز الحديد يسبب فقر دم صغير الخلايا ناقص الصباغ.","صحيح؛ زيادة تفصص المعتدلات وكبر حجم الكريات الحمر من العلامات المميزة جداً لفاقات الدم العرطلة (Megaloblastic Anemia) الناتجة عن عوز B12 أو الفولات.","خطأ. التلاسيميا تسبب فقر دم صغير الخلايا ناقص الصباغ مع خلايا هدفية."]},
+{tag:"محور 3: الاستقصاء المخبري", text:"ما هو العرض السريري الذي يميز فقر الدم بعوز فيتامين B12 عن فقر الدم بعوز حمض الفوليك؟",
+ hint:"فيتامين B12 يدخل في استقلاب الأحماض الدهنية الضرورية لغمد النخاعين (المايلين).",
+ options:["ظهور اليرقان الخفيف.","الإصابة باعتلالات عصبية (مثل تنكس النخاع الشوكي المترقي).","ضخامة الطحال الشديدة.","ظهور التهاب اللسان المتقرح."],
+ correct:1,
+ reason:"صحيح؛ الإصابات العصبية (التهاب الأعصاب المحيطية، تنكس النخاع) تميز عوز B12 ولا تحدث في عوز الفولات.",
+ optionExplanations:["خطأ. اليرقان الخفيف قد يظهر في كليهما بسبب تكوّن الدم غير الفعال والانحلال داخل النقي.","صحيح؛ الإصابات العصبية (التهاب الأعصاب المحيطية، تنكس النخاع) تميز عوز B12 ولا تحدث في عوز الفولات.","خطأ. ضخامة الطحال الشديدة تميز أمراضاً مثل التلاسيميا الكبرى أو ابيضاض الدم، وليس من العلامات الفارقة بين العوزين.","خطأ. التهاب اللسان المتقرح يمكن أن يحدث في عوز الحديد وعوز B12، ولكنه ليس العرض الفارِق الحاسم بين B12 والفولات كالإصابة العصبية."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"في حالات فقر الدم الانحلالي داخل الأوعية (Intravascular Hemolysis)، أي من المؤشرات المخبرية التالية يشهد انخفاضاً ملحوظاً وسريعاً؟",
+ hint:"بروتين بلازمي وظيفته التقاط الخضاب الحر لمنع أذية الكلى.",
+ options:["إنزيم نازعة هيدروجين اللاكتات (LDH).","البيليروبين غير المباشر.","الشبكيات (Reticulocytes).","الهابتن غلوبين (Haptoglobin)."],
+ correct:3,
+ reason:"صحيح؛ الهابتن غلوبين يرتبط بالهيموغلوبين المتحرر لتشكيل معقد يتم تصفيته بسرعة من الدوران، مما يؤدي لانخفاض نسبته بشدة.",
+ optionExplanations:["خطأ. LDH يرتفع بشدة في حالات الانحلال بسبب تحرره من الكريات المتخربة.","خطأ. البيليروبين غير المباشر يرتفع نتيجة استقلاب الهيم المتحرر.","خطأ. الشبكيات ترتفع كاستجابة تعويضية من نقي العظم.","صحيح؛ الهابتن غلوبين يرتبط بالهيموغلوبين المتحرر لتشكيل معقد يتم تصفيته بسرعة من الدوران، مما يؤدي لانخفاض نسبته بشدة."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"في داء تكور الكريات الوراثي (Hereditary Spherocytosis)، ما هو الاختبار المخبري النوعي الذي يعطي نتيجة إيجابية بتأكيد انحلال الكريات عند وضعها في محاليل ملحية ناقصة التوتر؟",
+ hint:"اختبار يقيس مدى قدرة الكرية الحمراء على تحمل التمدد قبل الانفجار.",
+ options:["اختبار كومبس المباشر (Direct Coombs Test).","اختبار الهشاشة الكروية (Osmotic Fragility Test).","اختبار التمنجل (Sickling Test).","الرحلان الكهربائي للخضاب."],
+ correct:1,
+ reason:"صحيح؛ الكريات المكورة الوراثية ذات هشاشة تناضحية زائدة، وتنفجر بسرعة عند وضعها في محاليل ناقصة التوتر.",
+ optionExplanations:["خطأ. اختبار كومبس يكون سلبياً في تكور الكريات الوراثي، مما ينفي السبب المناعي.","صحيح؛ الكريات المكورة الوراثية ذات هشاشة تناضحية زائدة، وتنفجر بسرعة عند وضعها في محاليل ناقصة التوتر.","خطأ. هذا الاختبار يجرى لكشف الهيموغلوبين المنجلي (HbS) في فقر الدم المنجلي.","خطأ. الرحلان الكهربائي يكون طبيعياً غالباً في تكور الكريات الوراثي، ويستخدم لتشخيص التلاسيميا والمنجلي."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"مريض مشخص بفقر الدم المنجلي متجانس الأمشاج (Hb S/S). ما هو الأساس الجزيئي الوراثي لهذه الطفرة؟",
+ hint:"استبدال حمض أميني في السلسلة بيتا يغير من خصائص الهيموغلوبين.",
+ options:["استبدال الغلوتاميك بالفالين في الموقع السادس من سلسلة بيتا.","غياب كلي لاصطناع سلاسل ألفا.","استبدال الفالين بالغلوتاميك في الموقع السادس من سلسلة ألفا.","استبدال الغلوتاميك باللايزين في سلسلة بيتا."],
+ correct:0,
+ reason:"صحيح؛ الطفرة تنجم عن استبدال الحمض الأميني الغلوتاميك بالفالين في الموقع السادس للسلسلة بيتا.",
+ optionExplanations:["صحيح؛ الطفرة تنجم عن استبدال الحمض الأميني الغلوتاميك بالفالين في الموقع السادس للسلسلة بيتا.","خطأ. غياب سلاسل ألفا يسبب تلاسيميا ألفا وليس فقر الدم المنجلي.","خطأ. الطفرة تحدث في السلسلة بيتا وليس ألفا، والاستبدال يكون من الغلوتاميك إلى الفالين وليس العكس.","خطأ. هذا الاستبدال (لللايزين) يعطي خضاب C (HbC) وليس HbS."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"طفل عمره سنة واحدة يعاني من نوبات ألم شديدة وبكاء مستمر مع انتفاخ والتهاب في أصابع اليدين والقدمين. إذا علمنا أنه مصاب بفقر الدم المنجلي، فبماذا يُعرف هذا العرض سريرياً؟",
+ hint:"أولى العلامات السريرية التي تنذر بالانسداد الوعائي للأطراف عند الأطفال.",
+ options:["نوبة الانحلال الحادة المحدثة بالفول.","التهاب الأصابع (Dactylitis) الناجم عن انسداد الأوعية الشعرية.","داء الهيموسيديرين (Hemochromatosis).","تليف النقي الأولي."],
+ correct:1,
+ reason:"صحيح؛ من أولى العلامات التي تنبئ بفقر الدم المنجلي عند الأطفال هو التهاب وانتفاخ أصابع اليدين والقدمين بسبب انسداد الشرايين الشعرية بالكريات المنجلية.",
+ optionExplanations:["خطأ. هذه النوبة تحدث في عوز إنزيم G6PD وليس المنجلي.","صحيح؛ من أولى العلامات التي تنبئ بفقر الدم المنجلي عند الأطفال هو التهاب وانتفاخ أصابع اليدين والقدمين بسبب انسداد الشرايين الشعرية بالكريات المنجلية.","خطأ. هذا داء ناتج عن تراكم الحديد بسبب نقل الدم المتكرر، ولا يسبب انتفاخ الأصابع الحاد.","خطأ. هذا مرض تنشؤي نقوي مزمن لا علاقة له بانتفاخ الأصابع في المنجلي."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"ما هو النمط النموذجي لرحلان الخضاب الكهربائي (Hb Electrophoresis) عند مريض مصاب بـ \"التلاسيميا بيتا الكبرى\" بعد عمر ستة أشهر؟",
+ hint:"في هذه الحالة يغيب اصطناع سلاسل بيتا كلياً أو ينقص بشدة، مما يمنع تشكل الخضاب البالغ الطبيعي.",
+ options:["HbS = 90%, HbF = 10%, HbA = 0%","HbA = 0%, HbF = 80-95%, HbA2 < 7%","HbA > 95%, HbA2 > 3.5%, HbF = 1%","HbH = 30%, HbA = 70%"],
+ correct:1,
+ reason:"صحيح؛ في التلاسيميا بيتا الكبرى يغيب الخضاب البالغ HbA، ويسيطر الخضاب الجنيني HbF بنسب عالية لتعويض النقص.",
+ optionExplanations:["خطأ. هذا النمط يميز فقر الدم المنجلي متجانس الأمشاج (Hb S/S).","صحيح؛ في التلاسيميا بيتا الكبرى يغيب الخضاب البالغ HbA، ويسيطر الخضاب الجنيني HbF بنسب عالية لتعويض النقص.","خطأ. هذا النمط يشير غالباً إلى التلاسيميا بيتا الصغرى (ارتفاع HbA2) وليس الكبرى.","خطأ. وجود خضاب H يميز داء الخضاب H (تلاسيميا ألفا المتوسطة) وليس تلاسيميا بيتا."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"في متلازمة الخضاب الجنيني (Hb Barts) الناجمة عن غياب الجينات الأربعة لسلاسل ألفا (--/--)، ما هو التركيب الجزيئي لخضاب بارت الذي يسبب الوفاة الجنينية؟",
+ hint:"تتجمع السلاسل الفائضة المتاحة في الجنين لتشكيل خضاب شاذ ذي ألفة شديدة للأوكسجين.",
+ options:["أربع سلاسل بيتا (4β).","أربع سلاسل غاما (4γ).","سلسلتان ألفا وسلسلتان غاما (2α 2γ).","سلسلتان دلتا وسلسلتان غاما (2δ 2γ)."],
+ correct:1,
+ reason:"صحيح؛ خضاب بارت يتكون من 4 سلاسل غاما، ويتميز بألفة شديدة للأوكسجين لا يتخلى عنه للأنسجة، مما يسبب وفاة الجنين.",
+ optionExplanations:["خطأ. أربع سلاسل بيتا تشكل خضاب H ويشاهد في داء الخضاب H عند البالغين.","صحيح؛ خضاب بارت يتكون من 4 سلاسل غاما، ويتميز بألفة شديدة للأوكسجين لا يتخلى عنه للأنسجة، مما يسبب وفاة الجنين.","خطأ. هذا هو الخضاب الجنيني الطبيعي (HbF).","خطأ. لا يوجد خضاب طبيعي أو مرضي شائع بهذا التركيب."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"مريض لديه عوز إنزيم G6PD (التفول)، تعرض لنوبة انحلال حادة بعد تناول مضادات الملاريا. ما هي الآلية الممرضة الدقيقة لحدوث الانحلال في هذه الحالة؟",
+ hint:"الإنزيم يحمي الكرية من الشوارد المؤكسدة عبر الحفاظ على مستويات مركب محدد.",
+ options:["نقص طاقة ATP مما يعطل مضخة الصوديوم وتنفجر الكرية.","انخفاض NADPH يؤدي لعجز الغلوتاثيون المرجع عن حماية الكرية من العوامل المؤكسدة.","زيادة إنتاج 2,3-DPG مما يفقد الغشاء مرونته.","تدمير الغشاء بواسطة أضداد ذاتية مناعية."],
+ correct:1,
+ reason:"صحيح؛ نقص NADPH يمنع إرجاع الغلوتاثيون، مما يجعل الهيموغلوبين عرضة للأكسدة والترسب (أجسام هاينز) وتخرب الكرية.",
+ optionExplanations:["خطأ. نقص ATP يلاحظ في عوز إنزيم البايروفيت كيناز وليس G6PD.","صحيح؛ نقص NADPH يمنع إرجاع الغلوتاثيون، مما يجعل الهيموغلوبين عرضة للأكسدة والترسب (أجسام هاينز) وتخرب الكرية.","خطأ. 2,3-DPG لا علاقة له بآلية الانحلال في التفول.","خطأ. الانحلال في التفول غير مناعي (كومبس سلبي)."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"ما هي السمة المخبرية المميزة لفقر الدم الانحلالي المناعي الذاتي (AIHA) التي تفرق بينه وبين الانحلال غير المناعي؟",
+ hint:"فحص يكشف وجود الأضداد الملتصقة بسطح الكريات الحمراء.",
+ options:["ارتفاع البيليروبين.","إيجابية اختبار كومبس المباشر (Direct Coombs Test).","وجود خلايا منجلية في اللطافة.","انخفاض عدد الشبكيات."],
+ correct:1,
+ reason:"صحيح؛ اختبار كومبس المباشر الإيجابي يؤكد وجود أضداد ذاتية على سطح الكرية، مما يشخص السبب المناعي للانحلال.",
+ optionExplanations:["خطأ. البيليروبين يرتفع في جميع أنواع الانحلال وليس المناعي فقط.","صحيح؛ اختبار كومبس المباشر الإيجابي يؤكد وجود أضداد ذاتية على سطح الكرية، مما يشخص السبب المناعي للانحلال.","خطأ. الخلايا المنجلية تميز فقر الدم المنجلي (وراثي).","خطأ. الشبكيات ترتفع في الانحلال المناعي كاستجابة طبيعية للنقي."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"في مرض كثرة الحمر الحقيقية (Polycythemia Vera)، ما هي الطفرة الجينية الأكثر شيوعاً التي تسبب تكاثراً غير منضبط للكريات الحمراء؟",
+ hint:"طفرة في بروتين كيناز مسؤول عن نقل إشارات عوامل النمو.",
+ options:["طفرة BCR-ABL.","طفرة JAK2 (V617F).","طفرة في جين الأنسولين.","طفرة في جينات الخضاب."],
+ correct:1,
+ reason:"صحيح؛ طفرة JAK2 موجودة في أكثر من 95% من حالات كثرة الحمر الحقيقية وتسبب نشاطاً مستمراً لإنتاج الخلايا.",
+ optionExplanations:["خطأ. طفرة BCR-ABL تميز ابيضاض الدم النقوي المزمن (CML).","صحيح؛ طفرة JAK2 موجودة في أكثر من 95% من حالات كثرة الحمر الحقيقية وتسبب نشاطاً مستمراً لإنتاج الخلايا.","خطأ. جين الأنسولين لا علاقة له بتكاثر الكريات الحمراء.","خطأ. جينات الخضاب تسبب اعتلالات خضاب ولا تسبب كثرة حمر تنشؤية."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"ما هو العلاج الإسعافي الأولي لتدبير نوبة \"انحباس الطحال\" (Splenic Sequestration) الحادة عند طفل مصاب بفقر الدم المنجلي؟",
+ hint:"النوبة تسبب هبوطاً حاداً في الخضاب وصدمة دورانية بسبب تجمع الدم في الطحال.",
+ options:["استئصال الطحال فوراً أثناء النوبة.","نقل الدم الإسعافي لتعويض الحجم المفقود ومنع الصدمة.","إعطاء جرعات عالية من الحديد.","استخدام العلاج الكيميائي."],
+ correct:1,
+ reason:"صحيح؛ نقل الدم الفوري ضروري لإنقاذ حياة الطفل من الصدمة الدورانية الناتجة عن احتجاز الدم في الطحال.",
+ optionExplanations:["خطأ. الجراحة لا تجرى في المرحلة الحادة من الصدمة بل بعد الاستقرار.","صحيح؛ نقل الدم الفوري ضروري لإنقاذ حياة الطفل من الصدمة الدورانية الناتجة عن احتجاز الدم في الطحال.","خطأ. الحديد قد يكون ساماً في هؤلاء المرضى ولا يعالج نوبة الانحباس.","خطأ. العلاج الكيميائي لا يستخدم لعلاج نوبات المنجلي الحادة."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"أي من الحالات التالية تترافق مع ظهور \"أجسام هاينز\" (Heinz Bodies) في الكريات الحمراء عند تلوينها بملونات خاصة؟",
+ hint:"تنتج هذه الأجسام عن ترسب الهيموغلوبين المؤكسد والمخرب.",
+ options:["فقر الدم بعوز الحديد.","عوز إنزيم G6PD (التفول).","تلاسيميا بيتا الصغرى.","فقر الدم العرطل."],
+ correct:1,
+ reason:"صحيح؛ أجسام هاينز هي هيموغلوبين مترسب نتيجة الأكسدة في حالات عوز G6PD.",
+ optionExplanations:["خطأ. عوز الحديد لا يسبب ترسب الهيموغلوبين بل نقص إنتاجه.","صحيح؛ أجسام هاينز هي هيموغلوبين مترسب نتيجة الأكسدة في حالات عوز G6PD.","خطأ. التلاسيميا الصغرى لا تتميز بأجسام هاينز بشكل أساسي.","خطأ. فقر الدم العرطل يتميز بكبر حجم الخلايا وليس بأجسام هاينز."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"لماذا يظهر مرضى التلاسيميا الكبرى ملامح وجه مميزة (وجه تلاسيمي) مع تضخم في عظام الوجنتين والجبهة؟",
+ hint:"محاولة الجسم اليائسة لإنتاج الدم خارج الأماكن التقليدية.",
+ options:["بسبب ترسب الحديد في الجلد.","بسبب توسع جوف نقي العظم في عظام الجمجمة نتيجة فرط نشاط النقي للتعويض عن فقر الدم الشديد.","بسبب التهابات العظام المتكررة.","بسبب نقص الكالسيوم."],
+ correct:1,
+ reason:"صحيح؛ التوسع العظمي هو نتيجة لمحاولة نقي العظم إنتاج كميات هائلة من الكريات لتعويض الانحلال المستمر.",
+ optionExplanations:["خطأ. ترسب الحديد يسبب لوناً برونزياً للجلد وليس تغيراً في شكل العظام.","صحيح؛ التوسع العظمي هو نتيجة لمحاولة نقي العظم إنتاج كميات هائلة من الكريات لتعويض الانحلال المستمر.","خطأ. الملامح ليست ناتجة عن التهاب بل عن فرط تنسج النقي.","خطأ. نقص الكالسيوم يسبب هشاشة عظام وليس ضخامة عظام الوجه."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"ما هي الوظيفة الأساسية لدواء \"الهيدروكسي يوريا\" (Hydroxyurea) في علاج فقر الدم المنجلي؟",
+ hint:"يعمل على تحفيز إنتاج نوع معين من الهيموغلوبين يمنع التمنجل.",
+ options:["قتل الخلايا المنجلية في الدوران.","تحفيز إنتاج الهيموغلوبين الجنيني (HbF) الذي يمنع بلمرة الهيموغلوبين S وتمنجل الكريات.","زيادة امتصاص الحديد من الأمعاء.","تسكين الألم فقط."],
+ correct:1,
+ reason:"صحيح؛ الهيدروكسي يوريا يرفع نسبة HbF، مما يقلل من تكرار نوبات الألم والانسداد الوعائي.",
+ optionExplanations:["خطأ. الدواء لا يقتل الخلايا بل يحسن جودة الهيموغلوبين داخلها.","صحيح؛ الهيدروكسي يوريا يرفع نسبة HbF، مما يقلل من تكرار نوبات الألم والانسداد الوعائي.","خطأ. لا علاقة له باستقلاب الحديد.","خطأ. له دور وقائي فيزيولوجي وليس مجرد مسكن ألم."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"مريض يعاني من فقر دم انحلالي، أظهرت اللطاخة وجود كريات حمراء مجزأة (Schistocytes). ما هو التشخيص الذي يجب استبعاده فوراً كحالة إسعافية؟",
+ hint:"وجود الشظايا يدل على انحلال دموي ميكانيكي داخل الأوعية الصغيرة.",
+ options:["فقر الدم بعوز الحديد.","فقر الدم الانحلالي مجهري الأوعية (مثل TTP أو HUS).","التلاسيميا الصغرى.","فقر الدم المنجلي المستقر."],
+ correct:1,
+ reason:"صحيح؛ وجود الشظايا (Schistocytes) يشير بقوة إلى حالات خطيرة مثل TTP تتطلب تدخلاً فورياً بفصادة البلازما.",
+ optionExplanations:["خطأ. عوز الحديد يسبب خلايا صغيرة باهتة ولا يسبب شظايا.","صحيح؛ وجود الشظايا (Schistocytes) يشير بقوة إلى حالات خطيرة مثل TTP تتطلب تدخلاً فورياً بفصادة البلازما.","خطأ. التلاسيميا تتميز بخلايا هدفية وليس شظايا انحلال ميكانيكي.","خطأ. المنجلي يتميز بخلايا منجلية، والشظايا تدل على اختلاط آخر أو تشخيص مختلف."]},
+{tag:"محور 4: الأمراض الانحلالية والتكاثرية", text:"ما هو السبب الرئيسي للوفاة عند مرضى التلاسيميا الكبرى الذين لا يتلقون علاجاً خافضاً للحديد (Chelation Therapy) بشكل منتظم؟",
+ hint:"الحديد الزائد يترسب في أعضاء حيوية ويخرب وظائفها.",
+ options:["الفشل الكلوي.","قصور القلب الناتج عن ترسب الحديد في عضلة القلب (Siderosis).","تليف الكبد فقط.","الالتهابات الرئوية."],
+ correct:1,
+ reason:"صحيح؛ ترسب الحديد في القلب هو السبب الرئيسي للاختلاطات القاتلة عند مرضى التلاسيميا الذين ينقل لهم الدم بكثرة.",
+ optionExplanations:["خطأ. الفشل الكلوي ليس السبب الرئيسي المباشر للوفاة في التلاسيميا.","صحيح؛ ترسب الحديد في القلب هو السبب الرئيسي للاختلاطات القاتلة عند مرضى التلاسيميا الذين ينقل لهم الدم بكثرة.","خطأ. تليف الكبد يحدث فعلاً لكن قصور القلب هو الأكثر تهديداً للحياة وسرعة.","خطأ. الالتهابات قد تحدث بسبب استئصال الطحال، لكن تراكم الحديد القلبي هو القاتل الصامت الأول."] }
+];
 
-                let optionsHTML = '';
-                q.options.forEach((opt, idx) => {
-                    let btnClass = '';
-                    if (answered) {
-                        if (idx === q.correctIndex) btnClass = 'correct-reveal disabled';
-                        else if (idx === selectedOptionIndex && idx !== q.correctIndex) btnClass =
-                            'wrong-reveal disabled';
-                        else btnClass = 'disabled';
-                    } else if (idx === selectedOptionIndex) btnClass = 'selected';
-                    optionsHTML += `<li><button class="option-btn ${btnClass}" data-index="${idx}" ${answered ? 'disabled' : ''}><span class="option-letter">${opt.letter}</span><span>${opt.text}</span></button></li>`;
-                });
+let queue = [];
+let results = [];
+let currentIdx = 0;
+let solvedCount = 0;
+const totalUnique = QUESTIONS.length;
 
-                const hintVisible = hintUsed && !answered;
-                const explanationVisible = answered;
-                const html = `
-            <div class="quiz-card">
-              <div class="progress-wrap"><div class="progress-bar-outer"><div class="progress-bar-inner" style="width:${progressPercent}%;"></div></div><span class="progress-label">${currentQuestionIndex + 1}/${total}</span></div>
-              <span class="question-number">✦ سؤال ${q.id}</span>
-              <p class="question-text">${q.question}</p>
-              <ul class="options-list">${optionsHTML}</ul>
-              <div class="hint-area ${hintVisible ? 'visible' : ''}"><span class="hint-icon">💡</span><span class="hint-text">${q.hint}</span></div>
-              <div class="explanation-area ${explanationVisible ? 'visible' : ''}"><div class="explanation-label">📖 شرح الإجابة</div><p class="explanation-text">${q.explanation}</p></div>
-              <div class="controls-row">
-                <button class="btn btn-hint" id="btnHint" ${answered || hintUsed ? 'disabled' : ''}>💡 تلميح</button>
-                ${answered ? (currentQuestionIndex < total - 1 ? '<button class="btn btn-next" id="btnNext">التالي ←</button>' : '<button class="btn btn-next" id="btnFinish">عرض النتيجة 🏆</button>') : '<button class="btn btn-next" id="btnCheck" disabled>✓ تحقق من الإجابة</button>'}
-              </div>
-            </div>`;
-                quizRoot.innerHTML = html;
-                bindEvents(q, total);
-            }
+const startScreen = document.getElementById('startScreen');
+const quizMain = document.getElementById('quizMain');
+const reviewScreen = document.getElementById('reviewScreen');
+const startBtn = document.getElementById('startBtn');
+const qTag = document.getElementById('qTag');
+const qText = document.getElementById('qText');
+const qOptions = document.getElementById('qOptions');
+const feedback = document.getElementById('feedback');
+const feedbackTitle = document.getElementById('feedbackTitle');
+const feedbackBody = document.getElementById('feedbackBody');
+const nextBtn = document.getElementById('nextBtn');
+const retryBadge = document.getElementById('retryBadge');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
 
-            function bindEvents(q, total) {
-                document.querySelectorAll('.option-btn:not(.disabled)').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        if (answered) return;
-                        selectedOptionIndex = parseInt(this.getAttribute('data-index'));
-                        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove(
-                            'selected'));
-                        this.classList.add('selected');
-                        const btnCheck = document.getElementById('btnCheck');
-                        if (btnCheck) btnCheck.disabled = false;
-                    });
-                });
-                const btnHint = document.getElementById('btnHint');
-                if (btnHint) btnHint.addEventListener('click', () => { hintUsed = true;
-                    renderQuiz(); });
-                const btnCheck = document.getElementById('btnCheck');
-                if (btnCheck) btnCheck.addEventListener('click', () => {
-                    if (selectedOptionIndex === null) return;
-                    answered = true;
-                    if (selectedOptionIndex === q.correctIndex) score++;
-                    renderQuiz();
-                });
-                const btnNext = document.getElementById('btnNext');
-                if (btnNext) btnNext.addEventListener('click', () => goToNextQuestion(total));
-                const btnFinish = document.getElementById('btnFinish');
-                if (btnFinish) btnFinish.addEventListener('click', () => {
-                    if (selectedOptionIndex === q.correctIndex && !answered) score++;
-                    answered = true;
-                    quizFinished = true;
-                    renderQuiz();
-                });
-            }
+startBtn.addEventListener('click', () => {
+  startScreen.classList.add('hidden');
+  quizMain.classList.remove('hidden');
+  initQuiz();
+});
 
-            function goToNextQuestion(total) {
-                if (currentQuestionIndex < total - 1) {
-                    currentQuestionIndex++;
-                    answered = false;
-                    hintUsed = false;
-                    selectedOptionIndex = null;
-                    renderQuiz();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    quizRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }
+function initQuiz(){
+  queue = QUESTIONS.map((q, i) => ({
+    ...q,
+    origIndex: i,
+    attempts: 0,
+    lastCorrect: false
+  }));
+  results = new Array(totalUnique).fill(null);
+  currentIdx = 0;
+  solvedCount = 0;
+  renderQuestion();
+}
 
-            function renderResultScreen() {
-                const total = questionBank.length;
-                const percent = Math.round((score / total) * 100);
-                let emoji, msg;
-                if (percent >= 90) { emoji = '🏆';
-                    msg = 'أداء استثنائي! أنت خبير في أمراض الدم.'; } else if (percent >= 70) { emoji = '🌟';
-                    msg = 'أداء رائع! واصل التقدم.'; } else if (percent >= 50) { emoji = '👍';
-                    msg = 'جيد جداً، مع المراجعة ستصل للقمة.'; } else { emoji = '📚';
-                    msg = 'لا بأس، رحلة التعلم مستمرة. حاول مجدداً!'; }
-                quizRoot.innerHTML = `
-            <div class="quiz-card result-screen">
-              <div class="result-emoji">${emoji}</div>
-              <div class="result-score">${score} / ${total}</div>
-              <div class="result-label">${percent}%</div>
-              <p class="result-msg">${msg}</p>
-              <div class="controls-row" style="justify-content:center;"><button class="btn btn-restart" id="btnRestart">🔄 إعادة الاختبار</button></div>
-            </div>`;
-                document.getElementById('btnRestart').addEventListener('click', () => {
-                    currentQuestionIndex = 0;
-                    score = 0;
-                    answered = false;
-                    hintUsed = false;
-                    selectedOptionIndex = null;
-                    quizFinished = false;
-                    renderQuiz();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
+function updateProgress(){
+  const pct = (solvedCount / totalUnique) * 100;
+  progressFill.style.width = pct + '%';
+  progressText.textContent = solvedCount + ' / ' + totalUnique;
+}
 
-            function init() { renderQuiz(); }
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-            else init();
+function renderQuestion(){
+  updateProgress();
+  const q = queue[currentIdx];
+  qTag.textContent = q.tag + ' · سؤال ' + (q.origIndex+1);
+  qText.textContent = q.text;
+  const qHint = document.getElementById('qHint');
+  if(q.hint){
+    qHint.innerHTML = '<b>تلميح:</b> ' + q.hint;
+    qHint.classList.remove('hidden');
+  } else {
+    qHint.classList.add('hidden');
+  }
+  qOptions.innerHTML = '';
+  feedback.classList.remove('show','right','wrong');
+  nextBtn.classList.add('hidden');
+  if(q.attempts > 0){
+    retryBadge.classList.remove('hidden');
+  } else {
+    retryBadge.classList.add('hidden');
+  }
+  const isTF = q.type === 'tf';
+  const wrap = document.createElement('div');
+  wrap.className = isTF ? 'tf-wrap' : '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleAnswer(i, btn));
+    wrap.appendChild(btn);
+  });
+  qOptions.appendChild(wrap);
+}
 
-            window.K4Quiz = {
-                loadQuestionBank: function(newBank) {
-                    if (Array.isArray(newBank) && newBank.length > 0) {
-                        const valid = newBank.every(q => q.question && Array.isArray(q.options) && q
-                            .options.length >= 2 && typeof q.correctIndex === 'number' && q
-                            .correctIndex >= 0 && q.correctIndex < q.options.length && q.options.every(
-                                o => o.letter && o.text));
-                        if (valid) {
-                            questionBank.length = 0;
-                            questionBank.push(...newBank);
-                            currentQuestionIndex = 0;
-                            score = 0;
-                            answered = false;
-                            hintUsed = false;
-                            selectedOptionIndex = null;
-                            quizFinished = false;
-                            renderQuiz();
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                            console.log('✅ K4: تم تحميل بنك الأسئلة بنجاح (' + newBank.length +
-                                ' سؤال)');
-                            return true;
-                        } else { console.error(
-                                '❌ K4: بنك الأسئلة غير صالح. تأكد من احتوائه على: question, options (مع letter و text), correctIndex.'
-                                ); return false; }
-                    }
-                    console.error('❌ K4: يجب أن يكون بنك الأسئلة مصفوفة غير فارغة.');
-                    return false;
-                },
-                reset: function() {
-                    currentQuestionIndex = 0;
-                    score = 0;
-                    answered = false;
-                    hintUsed = false;
-                    selectedOptionIndex = null;
-                    quizFinished = false;
-                    renderQuiz();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                },
-            };
-            console.log('%c🩸 K4 أمراض الدم %cجاهز | %c' + questionBank.length + ' سؤالاً',
-                'color:#d4a853;font-weight:bold;font-size:16px;', 'color:#94a3b8;',
-                'color:#3b82f6;font-weight:bold;');
-        })();
-    </script>
+function handleAnswer(selectedIdx, btnEl){
+  const q = queue[currentIdx];
+  const allBtns = qOptions.querySelectorAll('.option-btn');
+  allBtns.forEach(b => b.classList.add('disabled'));
+  const isCorrect = selectedIdx === q.correct;
+  if(isCorrect){
+    btnEl.classList.add('correct');
+  } else {
+    btnEl.classList.add('wrong');
+    allBtns[q.correct].classList.add('correct');
+  }
+  feedback.classList.add('show', isCorrect ? 'right' : 'wrong');
+  feedbackTitle.textContent = isCorrect ? '✔ إجابة صحيحة' : '✘ إجابة خاطئة';
+  let body = '<b>الإجابة الصحيحة:</b> ' + q.options[q.correct];
+  if(q.optionExplanations && q.optionExplanations.length){
+    body += '<br><br><b>شرح كل خيار:</b><ul style="margin:6px 0 0;padding-right:18px;">';
+    q.options.forEach((opt, i) => {
+      const mark = i === q.correct ? '✔' : '✘';
+      body += '<li style="margin-bottom:6px;"><b>' + mark + ' ' + opt + ':</b> ' + (q.optionExplanations[i] || '') + '</li>';
+    });
+    body += '</ul>';
+  } else {
+    body += '<br><br><b>التعليل والاستنتاج:</b> ' + q.reason;
+  }
+  feedbackBody.innerHTML = body;
+  q.lastCorrect = isCorrect;
+  if(!isCorrect){
+    q.attempts += 1;
+  }
+  nextBtn.classList.remove('hidden');
+  nextBtn.textContent = isCorrect ? 'السؤال التالي' : 'إعادة المحاولة على هذا السؤال';
+}
+
+nextBtn.addEventListener('click', () => {
+  const q = queue[currentIdx];
+  if(q.lastCorrect){
+    // mark solved, record result, remove from active position
+    results[q.origIndex] = {
+      tag: q.tag,
+      text: q.text,
+      hint: q.hint,
+      correctAnswer: q.options[q.correct],
+      reason: q.reason,
+      options: q.options,
+      correct: q.correct,
+      optionExplanations: q.optionExplanations,
+      attempts: q.attempts
+    };
+    solvedCount++;
+    queue.splice(currentIdx, 1);
+    if(currentIdx >= queue.length) currentIdx = 0;
+  } else {
+    // move this question to the end of queue so it repeats after others (or immediately if last one)
+    const failedQ = queue.splice(currentIdx, 1)[0];
+    queue.push(failedQ);
+    if(currentIdx >= queue.length) currentIdx = 0;
+  }
+  if(queue.length === 0){
+    showReview();
+  } else {
+    renderQuestion();
+  }
+});
+
+function showReview(){
+  quizMain.classList.add('hidden');
+  document.getElementById('mainHeader').classList.add('hidden');
+  reviewScreen.classList.remove('hidden');
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  results.forEach((r, idx) => {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    let attemptsNote = '';
+    if(r.attempts > 0){
+      attemptsNote = '<div class="rq-attempts">تمت إعادة هذا السؤال ' + r.attempts + ' مرة قبل الإجابة الصحيحة</div>';
+    }
+    let reasonBlock = '';
+    if(r.optionExplanations && r.optionExplanations.length){
+      reasonBlock = '<div class="rq-reason"><b>شرح كل خيار:</b><ul style="margin:6px 0 0;padding-right:18px;">';
+      r.options.forEach((opt, i) => {
+        const mark = i === r.correct ? '✔' : '✘';
+        reasonBlock += '<li style="margin-bottom:6px;"><b>' + mark + ' ' + opt + ':</b> ' + (r.optionExplanations[i] || '') + '</li>';
+      });
+      reasonBlock += '</ul></div>';
+    } else {
+      reasonBlock = '<div class="rq-reason"><b>التعليل:</b> ' + r.reason + '</div>';
+    }
+    card.innerHTML =
+      '<div class="rq-num">' + r.tag + ' · سؤال ' + (idx+1) + '</div>' +
+      '<div class="rq-text">' + r.text + '</div>' +
+      (r.hint ? '<div class="q-hint" style="margin-bottom:8px;"><b>تلميح:</b> ' + r.hint + '</div>' : '') +
+      '<div class="rq-answer">✔ ' + r.correctAnswer + '</div>' +
+      reasonBlock +
+      attemptsNote;
+    list.appendChild(card);
+  });
+}
+</script>
 </body>
 </html>
